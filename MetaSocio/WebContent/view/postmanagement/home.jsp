@@ -1,10 +1,14 @@
 
 <!DOCTYPE html>
-<%@page import="com.metasocio.model.postmanagement.PostManagement"%>
+<%@page import="com.metasocio.model.postmanagement.Post"%>
+<%@page import="com.metasocio.model.commentmanagement.Comment"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="com.metasocio.model.usermanagement.User"%>
+<%@page import="java.util.Map"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Iterator"%>
+
 <html lang="en">
 
 <head>
@@ -12,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Vitality</title>
+    <title>Meta-Socio/Home</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <!-- Retina.js - Load first for faster HQ mobile images. -->
@@ -37,6 +41,7 @@
     <link href="assets/css/plugins/animate.css" rel="stylesheet" type="text/css">
     <link id="changeable-colors" rel="stylesheet" href="assets/css/vitality-red.css">
     <link href="assets/demo/style-switcher.css" rel="stylesheet">
+    <link href="assets/css/custom.css" rel="stylesheet">
     <!-- IE8 support for HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -50,8 +55,15 @@
      <%@ page errorPage="../../exception/error.jsp"%>
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
-    <nav class="navbar navbar-inverse navbar-fixed-top navbar-expanded">
+        <nav class="navbar navbar-inverse navbar-fixed-top navbar-expanded" style="background-color: black">
         <div class="container">
+        <%User userObject=new User();
+                        userObject=(User)request.getAttribute("userObject");
+                       
+                      //  int id = (int)request.getAttribute("id"); 
+                     HttpSession session=request.getSession(false);
+                     session.setAttribute("userObject", userObject);
+                      %>
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -74,16 +86,10 @@
                         <a class="page-scroll" href="#about">What is Meta-Socio</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#process">Learn More</a>
+                        <a class="page-scroll" href="#process">Follower</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#work">Pricing</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#pricing">Log-in</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#contact">Business Benefits</a>
+                        <a class="page-scroll" href="#pricing">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -91,142 +97,171 @@
         </div>
         <!-- /.container -->
     </nav>
-    <section id="about">
+    <section id="about" style="margin-top:3%; background-color: #E9EAED;">
         <div class="container-fluid">
+        <div  class="col-lg-2" >
+            	<img src=<%=userObject.getImageURL()%>height="200px" width="200px">
+            	<br>
+            	<label><%=userObject.getName() %></label>
+          </div>
         <form action="AddPost" method="post">
+    
             <div class="row text-center">
-                <div class="col-lg-8 col-lg-offset-2 wow fadeIn">
-                    <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Tell everybody what are you working on. </label>
-                               <input type="text" class="form-control"  placeholder="Tell everybody what are you working on" name="post" required data-validation-required-message="Please enter your role.">
+          
+                <div class="col-lg-8 wow fadeIn">
+                    <div class="form-group col-xs-12 col-lg-12 floating-label-form-group controls" style="border-color: orange;">
+                          <label>What's on your mind ? </label> 
+                               <textarea  class="form-control"  placeholder="What's on your mind ? " name="post" required data-validation-required-message="Please enter your role." style="background-color: white; width:"></textarea>
                     </div>
             	</div>
+            	<div class="col-lg-7 wow fadeIn">
+                    <div class="form-group col-xs-12" style="margin-top:1%">
+                           <input type="submit" class="btn btn-outline-dark " value="Share Your Status "/>
+                    </div>
+                    </div>
             </div>
-            <div class="row text-right">
-                    <div class="col-lg-8 col-lg-offset-2 wow fadeIn">
-                    <div class="form-group col-xs-12">
-                           <input type="submit" class="btn btn-outline-dark" value="Share"/>
-                    </div>
-                    </div>
+            <div class="row text-right"  >
                     
             </div>
             </form>
-            <div class="row content-row">
-                <div class="col-md-3 col-sm-6 wow fadeIn" data-wow-delay=".2s">
+       <div class="row content-row">
+                <div class="col-md-6 col-sm-6 col-lg-2 wow fadeIn" data-wow-delay=".2s">
                     <div class="about-content">
                         <h3>Groups</h3>
-                        <div class="col-md-12" style="margin-bottom: 20px;">
-                        <a class="btn btn-outline-dark" style="width: 100%;">Browse Groups</a>
+                        <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
+                        <button  class="btn btn-outline-dark " style="width: 100%;" data-toggle="modal" data-target="#createGroup">Browse Group</button>
                         </div>
-                        <div class="col-md-12">
+
+
+						<div id="createGroup" class="modal fade" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">Create Group</h4>
+									</div>
+									<form action="Signup" method="post" class="form" role="form">
+										<div class="modal-body">
+											
+											<div class="form-group">
+												<label for="name" class="control-label">Group Name</label> <input type="text" name="groupName" id="groupName"
+													class="form-control" placeholder="Enter Group Name" required>
+											</div>
+											<div class="form-group">
+												<label for="password" class="control-label">Add Group Members
+													</label> <input type="text" name="groupMembers"
+													id="groupMembers" class="form-control"
+													placeholder="Select Group Members">
+											</div>
+											<div class="row">
+												<input type="Submit"
+													class="btn btn-success col-lg-offset-2 col-lg-8"
+													Value="Create Group"> 
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-12">
                         <a class="btn btn-outline-dark" style="width: 100%">Create Group</a>
                         </div>                        
                     </div>
                 </div>
                 
-                
-                
-                
-		 <!-- if(postList != null){
-				for(PostManagement post:postList){
-				   out.println("<tr>");
-				  out.println("<td><img src='images/"+post.get()+"' alt='car image' width='300px' height='200px'></td>");
-				   out.println("<td>");
-				   out.println(vehicle.getMake());
-				   out.println("<br/><br/>"); 
-				   out.println(vehicle.getModel());
-				   out.println("<br/><br/>");
-				   out.println(vehicle.getPrice());
-				   out.println("<br/><br/>");
-				   out.println("<a href='/CaseStudy5/UserSearchResultController?vehicleId="+vehicle.getId()+"'> View Specifications </a>");
-				   out.println("<br/><br/>");
-				   out.println("<a href='/CaseStudy5/AdminEditController?vehicleId="+vehicle.getId()+"'> Edit Car </a>");
-				   out.println("</td>");
-				   out.println("</tr>");
-				}
-			}
-			else{
-				out.println("<tr><font size='20px' color='red'>Oops there is not any car in this catagory</font></tr>");
-			} 
-			%>
-                 -->
-                
-                
-                
-                
-                
-                
-                <div class="col-md-6 col-sm-6 wow fadeIn" data-wow-delay=".4s">
+                <div class="col-md-8 col-sm-8 col-lg-8 wow fadeIn" data-wow-delay=".4s" >
 					
 					
-					<% List<PostManagement> postList = (List)request.getAttribute("postList"); 
-					if(postList != null)
+					<% 	
+					Map<Post, List<Comment>> postMap  = (Map)request.getAttribute("postMap"); 
+					//Map<Integer,String> imageMapForPostedUsers = (Map)request.getAttribute("imageMapForPostedUsers"); 
+					//Map<Integer,String> imageMapForCommentedUsers = (Map)request.getAttribute("imageMapForCommentedUsers"); 
+					if(postMap != null)
 					{
-						for(PostManagement post:postList){ %>
-					
-					
-					<div class="row">
+						 Iterator iterator = postMap.keySet().iterator();
+
+					   while (iterator.hasNext()) {
+					      Post post = (Post) iterator.next();
+					      List<Comment> commentList = null;
+					      commentList = postMap.get(post);
+					     %>
+					<div class="row  padding-small rounded-corner" style="background-color:white; margin-top: 2%;">
 						<div class="col-md-2">
-							<img src="assets/img/people/2.jpg" height="50px" width="50px">
+							
+							<img src=<%=post.getUser().getImageURL() %> height="100px" width="100px">
 						</div>
 						<div class="col-md-10">
 							<p>
-								Name - <%=post.getCreated_by() %> <strong>date -  <%=post.getCreated_at() %></strong>
+								<strong> <%=post.getCreatedBy()%></strong> <span style=" color: orange">Posted</span> 
 							</p>
 							<h3>
-								<strong><%=post.getPostDetails() %></strong>
+								<i><p style="word-break: break-all;" ><%=post.getPostDetails() %></p></i>
 							</h3>
-							<button class="btn btn-outline-dark">like</button>
-							<button class="btn btn-outline-dark">comment</button>
-							<div class="col-md-12">
-								<div class="row" id="comment" style="margin-top: 20px;background-color: #F2F2F2">
+							<%if(post.getLikes() > 0)
+							{
+								out.println(post.getLikes());
+							} %>
+							
+								<a><i class="fa fa-thumbs-up"></i></a>
+								
+							<a href="LikeManager?postID=<%=post.getPostId()%>" class="button"><i class="fa fa-thumbs-up"></i>likes </a>
+							
+							
+						
+							<%-- <a href="LikeController?postID=<%out.println(post.getPostId()); %>" class="button"> --%>
+							
+							<% for(Comment comment : commentList){%>
+							
+							<div class="col-md-12" >
+								<div class="row rounded-corner padding-smallComment" id="comment" style="margin-top:2%;background-color: #F6F7F8;">
 									<div class="col-md-2">
-										<img src="assets/img/people/2.jpg" height="50px" width="50px">
+										<img src=<%=comment.getUser().getImageURL()%> height="50px" width="50px">
 									</div>
 									<div class="col-md-10">
 										<p>
-											Name - <strong>date</strong> at <strong>time</strong> from <strong>place</strong>
-										</p>
-										<h3>
-											<strong>Comment</strong>
-										</h3>
-										<button class="btn btn-outline-dark">like</button>
-										<button class="btn btn-outline-dark">comment</button>
+								<b> <i><%=comment.getCreatedBy()%></i></b><span Style="color:blue; margin-left: 1%;">Commented</span>
+							</p>
+										
+											<p style="word-break: break-all;" ><%=comment.getComments() %></p>
+										
+										
 									</div>
 								</div>
 
 							</div>
+						<%} %>
+						<form action="AddComment?postID=<%out.println(post.getPostId()); %>" method="post">
+										<textarea name="comment" placeholder="Add your comments here" class="form-control"></textarea>
+										<button type="submit" class="btn btn-outline-dark btn-small" style>comment</button>
+											</form>
 						</div>
 						</div>
 						<%} %>
 						<%} %>
-	
+						<a href="_blank" class="button">loadMore</a>
 				</div>
-                <div class="col-md-3 col-sm-6 wow fadeIn" data-wow-delay=".8s">
+                <div class="col-md-3 col-sm-6 col-lg-2 wow fadeIn" data-wow-delay=".8s">
                     <div class="about-content">
                         <i class="fa fa-heart fa-4x"></i>
                         <h3>Suggested People</h3>
-                        <%User userObject=new User();
-                        userObject=(User)request.getAttribute("userObject");
-                      //  int id = (int)request.getAttribute("id"); 
-                     HttpSession session=request.getSession(false);
-                     session.setAttribute("userObject", userObject);
-                      %>
+                        
                         <%// String email =(String) request.getAttribute("email");%>
                         <%List<User> usersOfSameDepartment =new ArrayList<User>(); 
                         usersOfSameDepartment=(List<User>)request.getAttribute("usersList"); 
                         if(usersOfSameDepartment.size()==1){
                         	%>
-                        	<div class="col-md-12 col-lg12 col-sm-12 col-xs-12">No Suggestions</div>
+                        	<div class="col-md-12 col-lg-2 col-sm-12 col-xs-12">No Suggestions</div>
                         	<%
                         }
                         else{
                         	 for(User userOfSameDepartment : usersOfSameDepartment){
-                         		if(!userOfSameDepartment.getEmail_id().equalsIgnoreCase(userObject.getEmail_id())){
+                         		if(!userOfSameDepartment.getEmailId().equalsIgnoreCase(userObject.getEmailId())){
                         			   %>	
                         			    <div class="row" style="margin-bottom: 20px">
                         				<div class="col-md-8"><%=userOfSameDepartment.getName()%></div>
-                        				<div class="col-md-4"><a href="AddFriend?userId=<%=userObject.getUser_id()%>&friendId=<%=userOfSameDepartment.getUser_id()%>"><button class="btn btn-sm btn-outline-dark">Add</button></a></div>
+                        				<div class="col-md-4"><a href="AddFriend?userId=<%=userObject.getUserId()%>&friendId=<%=userOfSameDepartment.getUserId()%>"><button class="btn btn-sm btn-outline-dark">Add</button></a></div>
                         				</div>
                         <%		}
                         	}
@@ -257,6 +292,8 @@
     <script src="assets/js/vitality.js"></script>
     <!-- Style Switcher Scripts - Demo Purposes Only! -->
     <script src="assets/demo/style.switcher.js"></script>
+    
+    
 </body>
 
 </html>
