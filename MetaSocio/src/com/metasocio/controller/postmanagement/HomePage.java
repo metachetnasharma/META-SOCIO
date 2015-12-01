@@ -1,8 +1,9 @@
 package com.metasocio.controller.postmanagement;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,75 +12,87 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.metasocio.dbhelper.CRUD;
 import com.metasocio.exception.MetaSocioSystemException;
-import com.metasocio.model.postmanagement.PostManagement;
+import com.metasocio.model.commentmanagement.Comment;
+import com.metasocio.model.postmanagement.Post;
 import com.metasocio.model.usermanagement.User;
-import com.metasocio.service.MetaSocioService;
-import com.sun.jmx.snmp.Timestamp;
+import com.metasocio.service.commentmanagement.CommentService;
+import com.metasocio.service.postmanagement.PostService;
+import com.metasocio.service.usermanagement.UserService;
 
 /**
  * Servlet implementation class HomePage
  */
 @WebServlet("/HomePage")
-public class HomePage extends HttpServlet {
+/**
+ * Name: HomePage
+ * @author Anurag
+ * Since: 28 November,2015
+ * Description: It extends the homepage and extends the http servlet 
+ */
+public class HomePage extends HttpServlet 
+{
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public HomePage() {
+	public HomePage()
+	{
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
+	 * Name: doGet
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 *      Description: gets the value and sends the data
 	 */
 	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+			HttpServletResponse response) throws ServletException, IOException 
+	{
 		User user = new User();
-		/*
-		 * user.setName(name); user.setEmail_id(email); user.setPhone_No(phnNo);
-		 * user.setDepartment(department); user.setRole(role);
-		 * user.setProject_name(projectName); user.setImage_url(image);
-		 * 
-		 * java.util.Date date= new java.util.Date();
-		 * 
-		 * user.setCreated_at(date);
-		 */
-
-		System.out.println("*********************************in home");
-		try {
+		try
+		{
+			// Getting the value from the session
 			HttpSession session = request.getSession(false);
 			user = (User) session.getAttribute("userObject");
-			// CRUD crud=new CRUD();
-			MetaSocioService iService = new MetaSocioService();
+			// Calling the service Layer
+			UserService iUserService = new UserService();
 			// isService.setUserInfo(user);
+			PostService iPostService = new PostService();
+			// Calling the Comment service layer
+			CommentService iCommentService = new CommentService();
 			List<User> usersOfSamedepartment;
-
-			int userId = iService.getIdByEmail(user.getEmail_id());
-			user.setUser_id(userId);
-			usersOfSamedepartment = iService
-					.getUsersHavingSameDepartment(userId);
+			// Getting the userid from the email
+			int userId = iUserService.getIdByEmail(user.getEmailId());
+			user.setUserId(userId);
+			// getting the users from the same deepartment
+			usersOfSamedepartment = iUserService.getUsersHavingSameDepartment(userId);
+			// setting the userobject
 			request.setAttribute("userObject", user);
 			request.setAttribute("usersList", usersOfSamedepartment);
-
-			// boolean checkFriends = isService.checkFriends(id,friends)
-			/*
-			 * request.setAttribute("id",userId); request.setAttribute("email",
-			 * email);
-			 */
-			System.out.println("in home page****************************");
-		   List<PostManagement> postList = null;
-		   postList = iService.retrievePostOnHome();
-		   request.setAttribute("postList", postList);
+			// Putting the postmap with the list and post
+			Map<Post, List<Comment>> postMap = new LinkedHashMap<Post, List<Comment>>();
+			// Getting the posts with image
+			List<Post> postsWithImage = iPostService.retrievePostWithImageOnHome();
+			// Iterating over post 
+			for (Post post : postsWithImage) 
+			{
+				// Adding to the list with comment
+				List<Comment> commentsWithImage = iCommentService.retrieveCommentListWithImageByPostID(post.getPostId());
+				// puts the post with image
+				postMap.put(post, commentsWithImage);
+			}
+			// forwards to the homepage
+			request.setAttribute("postMap", postMap);
 			request.getRequestDispatcher("./view/postmanagement/home.jsp")
 					.forward(request, response);
-		} catch (MetaSocioSystemException e) {
-			// TODO Auto-generated catch block
-			System.out.println("[" + e.getMessage() + "]");
+		} 
+		catch (MetaSocioSystemException e) 
+		{
+			// sets the attribute
 			request.setAttribute("message", "[" + e.getMessage() + "]");
 			request.getRequestDispatcher("./exception/error.jsp").forward(
 					request, response);
@@ -93,58 +106,8 @@ public class HomePage extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		/*
-		 * String name=request.getParameter("name"); String
-		 * email=request.getParameter("email"); String
-		 * phnNo=request.getParameter("phone"); String
-		 * department=request.getParameter("department"); String
-		 * role=request.getParameter("role"); String
-		 * projectName=request.getParameter("projectName"); String
-		 * image=request.getParameter("picture");
-		 * System.out.println("image======="+image);
-		 */
-		User user = new User();
-		/*
-		 * user.setName(name); user.setEmail_id(email); user.setPhone_No(phnNo);
-		 * user.setDepartment(department); user.setRole(role);
-		 * user.setProject_name(projectName); user.setImage_url(image);
-		 * 
-		 * java.util.Date date= new java.util.Date();
-		 * 
-		 * user.setCreated_at(date);
-		 */
-
-		try {
-			HttpSession session = request.getSession(false);
-			user = (User) session.getAttribute("userObject");
-			// CRUD crud=new CRUD();
-			MetaSocioService iService = new MetaSocioService();
-			// isService.setUserInfo(user);
-			List<User> usersOfSamedepartment;
-
-			int userId = iService.getIdByEmail(user.getEmail_id());
-			user.setUser_id(userId);
-			usersOfSamedepartment = iService
-					.getUsersHavingSameDepartment(userId);
-			request.setAttribute("userObject", user);
-			request.setAttribute("usersList", usersOfSamedepartment);
-
-			// boolean checkFriends = isService.checkFriends(id,friends)
-			/*
-			 * request.setAttribute("id",userId); request.setAttribute("email",
-			 * email);
-			 */
-			System.out.println("in home page****************************");
-
-			request.getRequestDispatcher("./view/postmanagement/home.jsp")
-					.forward(request, response);
-		} catch (MetaSocioSystemException e) {
-			// TODO Auto-generated catch block
-			System.out.println("[" + e.getMessage() + "]");
-			request.setAttribute("message", "[" + e.getMessage() + "]");
-			request.getRequestDispatcher("./exception/error.jsp").forward(
-					request, response);
-		}
+		doGet(request, response);
+		
 
 	}
 

@@ -1,5 +1,5 @@
-
 <!DOCTYPE html>
+<%@page import="com.metasocio.model.usermanagement.User"%>
 <html lang="en">
 
 <head>
@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Vitality</title>
+    <title>:: META-SOCIO ::</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <!-- Retina.js - Load first for faster HQ mobile images. -->
@@ -56,9 +56,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll hidden-sm"  href="#page-top">
+               
+                <%
+                HttpSession session = request.getSession(false);
+            		
+            		if(session==null){
+            		%>
+            			<a class="navbar-brand page-scroll hidden-sm"  href="index.jsp">
                     <img src="assets/img/logo.png" class="img-responsive hidden-sm" alt="">
                 </a>
+            		<%	
+            		}
+            		else{
+            			%>
+            			<a class="navbar-brand page-scroll hidden-sm"  href="HomePage">
+                    <img src="assets/img/logo.png" class="img-responsive hidden-sm" alt="">
+                </a>
+            			<%
+            		}
+                %>
+               
+               
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -67,19 +85,11 @@
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#about">What is Meta-Socio</a>
+                        <a class="page-scroll" href="AboutMetaSocio">What is Meta-Socio</a>
                     </li>
+                   
                     <li>
-                        <a class="page-scroll" href="#process">Learn More</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#work">Pricing</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#pricing">Log-in</a>
-                    </li>
-                    <li>
-                        <a class="page-scroll" href="#contact">Business Benefits</a>
+                        <a class="page-scroll" href="https://accounts.google.com/o/oauth2/auth?scope=email&amp;redirect_uri=http://localhost:8080/MetaSocio/OAuth&amp;response_type=code&amp;client_id=881126743057-0u1nhaqo1uk2dl0h0e9mpe3f9ptvmsa6.apps.googleusercontent.com&amp;approval_prompt=force&hd=metacube.com">Log-in</a>
                     </li>
                 </ul>
             </div>
@@ -101,6 +111,7 @@
                             </div>
                             <div id="mce-responses">
                                 <div class="response" id="mce-error-response">${message}</div>
+                                <div class="response" id="mce-error-response">${param.message}</div>
                                 
                             </div>
             </div>

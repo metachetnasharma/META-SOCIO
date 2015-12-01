@@ -1,6 +1,7 @@
 package com.metasocio.controller.postmanagement;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,15 +12,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.metasocio.exception.MetaSocioSystemException;
-import com.metasocio.model.postmanagement.PostManagement;
+import com.metasocio.model.postmanagement.Post;
 import com.metasocio.model.usermanagement.User;
 import com.metasocio.service.MetaSocioService;
+import com.metasocio.service.postmanagement.PostService;
 
 /**
  * Servlet implementation class AddPost
  */
 @WebServlet("/AddPost")
-public class AddPost extends HttpServlet {
+/**
+ * Name:AddPost
+ * @author Anurag,2015
+ * Since:28 November
+ * Description: Adds The post to the Home Page
+ */
+public class AddPost extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -31,54 +40,59 @@ public class AddPost extends HttpServlet {
     }
 
 	/**
+	 * Name: doGet
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Description: Gets the request
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		// TODO Auto-generated method stub
 	}
 
 	/**
+	 * Name: doPost
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Description: Post the Data and Calls the Next servlet
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("in post******************************");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{
+		// Gets the Paramete From post 
 		String post=request.getParameter("post");
+		// INstance of user is created
 		User user=new User();
-		
-		
-		System.out.println("*********************************in home");
-		try {
+		try 
+		{
+			// fetching the Details saved in the session of the Object
 			HttpSession session =request.getSession(false);
+			// getting the session
 			user=(User) session.getAttribute("userObject");
-			//CRUD crud=new CRUD();
-			MetaSocioService iService=new MetaSocioService();
-			//isService.setUserInfo(user);
-			PostManagement newPost=new PostManagement();
-			int userId = user.getUser_id();
-			
-			newPost.setUserId(userId);
-			newPost.setPostDetails(post);
-			newPost.setGroupId(2);
-			java.util.Date date= new java.util.Date();
+			// Calling the service layer
+			PostService iPostService=new PostService();
+			Post newPost=new Post();
+			//getting the userid from the session
+			int userId = user.getUserId();
+			Date date= new java.util.Date();
+			// setting the date
 			newPost.setDatePosted(date);
+			// sets the user
+			newPost.setUser(user);
+			// sets post details
+			newPost.setPostDetails(post);
+			// sets likes
 			newPost.setLikes(0);
-			newPost.setCreated_at(date);
+			// gets the user details and share with  the created by and updated by
 			String userName=user.getName();
-			newPost.setCreated_by(userName);
-			newPost.setUpdated_by(userName);
-			
-			iService.sharePost(newPost);
-			
+			newPost.setCreatedBy(userName);
+			newPost.setUpdatedBy(userName);
+			// calling the function share post of the service layer
+			iPostService.sharePost(newPost);
+			// redirect to the home psage
 			response.sendRedirect("HomePage");
-			//request.getRequestDispatcher("./view/PostManagement/home.jsp").forward(request, response);
-		} catch (MetaSocioSystemException e) {
-			// TODO Auto-generated catch block
-			System.out.println("["+e.getMessage()+"]");;
+		} 
+		catch (MetaSocioSystemException e) 
+		{
 			request.setAttribute("message","["+e.getMessage()+"]");
 			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
 		}
-			
-		
 	}
-
 }

@@ -7,19 +7,19 @@
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-<class name="com.metasocio.model.friendsmanagement.Friends" table="friends">
+<class name="com.metasocio.model.friendsmanagement.Friend" table="friend">
 
   <id column="Id" name="id" type="int" >
 		<generator class="native"/>
 		</id>
 		
-		<property column="friend_one" name="friend_one" type="int" />
-		<property column="friend_two" name="friend_two" type="int" />
+		<property column="friend_one" name="friendOne" type="int" />
+		<property column="friend_two" name="friendTwo" type="int" />
 		
-		<property column="created_at" name="created_at" type="timestamp" />
-		<property column="updated_at" name="updated_at" type="timestamp" />
-		<property column="created_by" name="created_by" type="string" />
-		<property column="updated_by" name="updated_by" type="string" />
+		<property column="created_at" name="createdAt" type="timestamp" />
+		<property column="updated_at" name="updatedAt" type="timestamp" />
+		<property column="created_by" name="createdBy" type="string" />
+		<property column="updated_by" name="updatedBy" type="string" />
 		<property column="isdelete" name="isdelete" type="int" />
 		
 	</class>

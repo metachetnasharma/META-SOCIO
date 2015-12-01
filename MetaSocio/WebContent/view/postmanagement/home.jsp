@@ -16,7 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Meta-Socio/Home</title>
+    <title>:: META-SOCIO ::</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
     <!-- Retina.js - Load first for faster HQ mobile images. -->
@@ -72,7 +72,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll hidden-sm"  href="#page-top">
+                <a class="navbar-brand page-scroll hidden-sm"  href="HomePage">
                     <img src="assets/img/logo.png" class="img-responsive hidden-sm" alt="">
                 </a>
             </div>
@@ -86,10 +86,10 @@
                         <a class="page-scroll" href="#about">What is Meta-Socio</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#process">Follower</a>
+                        <a class="page-scroll" href="Followers">Follower</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#pricing">Logout</a>
+                        <a class="page-scroll" href="#pricing">Log-in/Logout</a>
                     </li>
                 </ul>
             </div>

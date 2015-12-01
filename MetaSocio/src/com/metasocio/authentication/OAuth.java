@@ -23,6 +23,7 @@ import com.metasocio.exception.MetaSocioSystemException;
 import com.metasocio.model.usermanagement.GooglePojo;
 import com.metasocio.model.usermanagement.User;
 import com.metasocio.service.MetaSocioService;
+import com.metasocio.service.usermanagement.UserService;
 
 @WebServlet("/OAuth")
 public class OAuth extends HttpServlet {
@@ -40,7 +41,7 @@ public class OAuth extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         
-        System.out.println("entering doGet");
+        //System.out.println("entering doGet");
         try {
             // get code
             String code = request.getParameter("code");
@@ -69,13 +70,13 @@ public class OAuth extends HttpServlet {
             	outputString += line;
             }
           
-            System.out.println(outputString);
+            //System.out.println(outputString);
             
             //get Access Token 
             JsonObject json = (JsonObject)new JsonParser().parse(outputString);
             String access_token = json.get("access_token").getAsString();
            
-           System.out.println(access_token);
+           //System.out.println(access_token);
 
             //get User Info 
             url = new URL(
@@ -87,65 +88,66 @@ public class OAuth extends HttpServlet {
                     urlConn.getInputStream()));
            
             while ((line = reader.readLine()) != null) {
-                System.out.println("Hello : "+line);
+                //System.out.println("Hello : "+line);
                 outputString += line;
             }
-            System.out.println(outputString);
+            //System.out.println(outputString);
             
             // Convert JSON response into Pojo class
             GooglePojo userDataObject = new Gson().fromJson(outputString, GooglePojo.class);
             
           /* --------------------------------- if(userDataObject.getHd().equals("metacube.com")) {
-            	System.out.println("************hi");
-            	System.out.println(".............Metacube Employee..........");
-            	System.out.println("**********************************getting session1");
+            	//System.out.println("************hi");
+            	//System.out.println(".............Metacube Employee..........");
+            	//System.out.println("**********************************getting session1");
             	
-            	 System.out.println("**********************************getting session2");*/
+            	 //System.out.println("**********************************getting session2");*/
             boolean isUserExists=false;
-            System.out.println("**********************************getting session");
+            //System.out.println("**********************************getting session");
         	HttpSession session=request.getSession(true);
-        	System.out.println("**********************************after getting session");
+        	//System.out.println("**********************************after getting session");
             
-            MetaSocioService iService=new MetaSocioService();
+            //MetaSocioService iService=new MetaSocioService();
+        	UserService iUserService=new UserService();
                 try {
                 	
                 	
-                	System.out.println("**********************************going to in exists method");
-					isUserExists=iService.isEmailExists(userDataObject.getEmail());
-					System.out.println("**********************************come from  exists method");
+                	//System.out.println("**********************************going to in exists method");
+					isUserExists=iUserService.isEmailExists(userDataObject.getEmail());
+					//System.out.println("**********************************come from  exists method");
 				} catch (MetaSocioSystemException e) {
 					// TODO Auto-generated catch block
-					System.out.println("["+e.getMessage()+"]");
+					//System.out.println("["+e.getMessage()+"]");
 				}
                 
                 
                 if(isUserExists){
-                	System.out.println("*********************************exist");
+                	//System.out.println("*********************************exist");
                 //	MetaSocio_Service isService=new MetaSocio_Service();
             		try {
             			//isService.setUserInfo(user);
             			//isService.setUserInfo(user);
             			User user=new User();
-            			user.setEmail_id(userDataObject.getEmail());
+            			user.setEmailId(userDataObject.getEmail());
             			user.setName(userDataObject.getName());
-            			user.setImage_url(userDataObject.getPicture());
+            			user.setImageURL(userDataObject.getPicture());
             			session.setAttribute("userObject",user);
             			response.sendRedirect("./HomePage");
             			/*int userId = iService.getIdByEmail(userDataObject.getEmail());
-            			System.out.println("*****************************************userf");
+            			//System.out.println("*****************************************userf");
             			List<User> users = iService.getUsersHavingSameDepartment(userId);
-            			System.out.println("*****************************************userf");
-            			System.out.println("***********************************users"+users);
+            			//System.out.println("*****************************************userf");
+            			//System.out.println("***********************************users"+users);
             			//boolean checkFriends = isService.checkFriends(id,friends)
             			request.setAttribute("id",userId);
             			request.setAttribute("email", userDataObject.getEmail());
             			request.setAttribute("usersList", users);
-            			System.out.println("________________________________________home");
+            			//System.out.println("________________________________________home");
             			request.getRequestDispatcher("./view/postmanagement/home.jsp").forward(request, response);*/
             		} catch (Exception e) {
             			// TODO Auto-generated catch block
-            			System.out.println("_______________________________Exception");
-            			System.out.println("["+e.getMessage()+"]");;
+            			//System.out.println("_______________________________Exception");
+            			//System.out.println("["+e.getMessage()+"]");;
             			request.setAttribute("message","["+e.getMessage()+"]");
             			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
             		}
@@ -162,29 +164,29 @@ public class OAuth extends HttpServlet {
             	
         /*    }
             else {
-            	System.out.println("Frzi Employee");
+            	//System.out.println("Frzi Employee");
             	String message="Please login with your metacube id";
             	request.setAttribute("message", message);
             	request.getRequestDispatcher("./index.jsp").forward(request, response);
             	
             	
             }*/
-            System.out.println(userDataObject);
+            //System.out.println(userDataObject);
             writer.close();
             reader.close();
             
         } catch (MalformedURLException e) {
-        	System.out.println("hi1");
-            System.out.println("["+e.getMessage()+"]");
+        	//System.out.println("hi1");
+            //System.out.println("["+e.getMessage()+"]");
             
         } catch (ProtocolException e) {
-        	System.out.println("hi2");
-        	  System.out.println("["+e.getMessage()+"]");
+        	//System.out.println("hi2");
+        	  //System.out.println("["+e.getMessage()+"]");
         } catch (IOException e) {
-        	System.out.println("hi3");
-        	  System.out.println("["+e.getMessage()+"]");
+        	//System.out.println("hi3");
+        	  //System.out.println("["+e.getMessage()+"]");
         }
-        System.out.println("leaving doGet");
+        //System.out.println("leaving doGet");
     }
 
 }

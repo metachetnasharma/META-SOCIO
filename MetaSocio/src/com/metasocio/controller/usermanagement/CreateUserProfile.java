@@ -4,6 +4,11 @@ import java.io.IOException;
 
 
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,9 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.naming.java.javaURLContextFactory;
+
 import com.metasocio.exception.MetaSocioSystemException;
 import com.metasocio.model.usermanagement.User;
 import com.metasocio.service.MetaSocioService;
+import com.metasocio.service.usermanagement.UserService;
 
 /**
  * Servlet implementation class CreateUserProfile
@@ -43,35 +51,69 @@ public class CreateUserProfile extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name=request.getParameter("name");
 		String email=request.getParameter("email");
-		String phnNo=request.getParameter("phone");
+		String address=request.getParameter("address");
+		String phnNo=request.getParameter("phoneNumber");
+		String city=request.getParameter("city");
 		String department=request.getParameter("department");
 		String role=request.getParameter("role");
-		String projectName=request.getParameter("projectName");
+		String college=request.getParameter("college");
+		String course=request.getParameter("course");
+		String highSchool=request.getParameter("highSchool");
+		String stream=request.getParameter("stream");
+		String dobString=request.getParameter("dateOfBirth");
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MM/dd/yyyy");
+		Date dob = null;
+		if(dobString!=null){
+		try {
+		
+				dob = simpleDateFormat.parse(dobString);
+				System.out.println(dob+"dob");
+			}
+		 catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			System.out.println(e1.getMessage());
+		}
+		}
+		String gender=request.getParameter("gender");
+		String about=request.getParameter("about");
+		String nickName=request.getParameter("nickName");
+		String relationshipStatus=request.getParameter("relationship");
 		String image=request.getParameter("picture");
-		System.out.println("image======="+image);
+		//System.out.println("image======="+image);
 		User user=new User();
 		user.setName(name);
-		user.setEmail_id(email);
-		user.setPhone_No(phnNo);
+		user.setEmailId(email);
+		user.setAddress(address);
+		user.setPhoneNo(phnNo);
+		user.setCity(city);
 		user.setDepartment(department);
 		user.setRole(role);
-		user.setProject_name(projectName);
-		user.setImage_url(image);
+        user.setCollege(college);
+        user.setCourse(course);
+        user.setHighSchool(highSchool);
+        user.setStream(stream);
+        user.setDateOfBirth(dob);
+        user.setGender(gender);
+        user.setAbout(about);
+        user.setNickName(nickName);
+        user.setRelationshipStatus(relationshipStatus);
+		user.setImageURL(image);
 		
-		java.util.Date date= new java.util.Date();
+		Date date= new Date();
 		
-		user.setCreated_at(date);
+		user.setCreatedAt(date);
 		//CRUD crud=new CRUD();
-	MetaSocioService iService=new MetaSocioService();
+	//MetaSocioService iService=new MetaSocioService();
+		UserService iUserService=new UserService();
 		try {
-			iService.setUserInfo(user);
+			iUserService.setUserInfo(user);
 			HttpSession session=request.getSession(false);
 			session.setAttribute("userObject",user);
 			response.sendRedirect("HomePage");
 			//request.getRequestDispatcher("./view/PostManagement/home.jsp").forward(request, response);
 		} catch (MetaSocioSystemException e) {
 			// TODO Auto-generated catch block
-			System.out.println("["+e.getMessage()+"]");;
+			//System.out.println("["+e.getMessage()+"]");;
 			request.setAttribute("message","["+e.getMessage()+"]");
 			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
 		}

@@ -1,6 +1,7 @@
 package com.metasocio.controller.friendmanagement;
 
 import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,9 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.metasocio.exception.MetaSocioSystemException;
-import com.metasocio.model.friendsmanagement.Friends;
+import com.metasocio.model.friendsmanagement.Friend;
 import com.metasocio.model.usermanagement.User;
 import com.metasocio.service.MetaSocioService;
+import com.metasocio.service.friendmanagement.FriendService;
+import com.metasocio.service.usermanagement.UserService;
 
 /**
  * Servlet implementation class AddFriend
@@ -34,28 +37,30 @@ public class AddFriend extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("********************************************add**************************");
+		//System.out.println("********************************************add**************************");
 		int userId =(Integer.parseInt(request.getParameter("userId"))) ;
 		int friendId =(Integer.parseInt(request.getParameter("friendId"))) ;
-		MetaSocioService iService=new MetaSocioService();
-		Friends friend = new Friends();
-		Friends secondFriend = new Friends();
+		//MetaSocioService iService=new MetaSocioService();
+		UserService iUserService=new UserService();
+		FriendService iFriendService=new FriendService();
+		Friend friend = new Friend();
+		Friend secondFriend = new Friend();
 		try {
 			
-			String userName = iService.getNameById(userId);
+			String userName = iUserService.getNameById(userId);
 			java.util.Date date= new java.util.Date();
-			friend.setCreated_at(date);
-			secondFriend.setCreated_at(date);
-			friend.setCreated_by(userName);
-			secondFriend.setCreated_by(userName);
-			friend.setUpdated_by(userName);
-			secondFriend.setUpdated_by(userName);
-			secondFriend.setCreated_by(userName);
-			friend.setFriend_one(userId);
-			secondFriend.setFriend_one(friendId);
-			friend.setFriend_two(friendId);
-			secondFriend.setFriend_two(userId);
-			 iService.addFriend(friend,secondFriend);
+			friend.setCreatedAt(date);
+			secondFriend.setCreatedAt(date);
+			friend.setCreatedBy(userName);
+			secondFriend.setCreatedBy(userName);
+			friend.setUpdatedBy(userName);
+			secondFriend.setUpdatedBy(userName);
+			secondFriend.setCreatedBy(userName);
+			friend.setFriendOne(userId);
+			secondFriend.setFriendOne(friendId);
+			friend.setFriendTwo(friendId);
+			secondFriend.setFriendTwo(userId);
+			iFriendService.addFriend(friend,secondFriend);
 			 
 			// User user=new User();
 			
@@ -70,7 +75,7 @@ public class AddFriend extends HttpServlet {
 			request.getRequestDispatcher("./view/postmanagement/home.jsp").forward(request, response);*/
 		} catch (MetaSocioSystemException e) {
 			// TODO Auto-generated catch block
-			System.out.println("["+e.getMessage()+"]");
+			//System.out.println("["+e.getMessage()+"]");
 			request.setAttribute("message","["+e.getMessage()+"]");
 			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
 		}

@@ -13,9 +13,11 @@
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>
 		<property name="hbm2ddl.auto">update </property>
-		<mapping resource="com/metasocio/hibernate/usermanagement/user_database_mapping.xml" />
+		<mapping resource="com/metasocio/hibernate/usermanagement/UserDatabaseMapping.xml" />
 		<mapping resource="com/metasocio/hibernate/postmanagement/PostDatabaseMapping.xml"/>
 		<mapping resource="com/metasocio/hibernate/friendsmanagement/FriendDatabaseMapping.xml" />
-		
+		<mapping resource="com/metasocio/hibernate/commentsmanagement/CommentDatabaseMapping.xml" />
+		<mapping resource="com/metasocio/hibernate/likesmanagement/LikeDatabaseMapping.xml"/>
+
 	</session-factory>
 </hibernate-configuration>
