@@ -18,6 +18,7 @@
 		<mapping resource="com/metasocio/hibernate/friendsmanagement/FriendDatabaseMapping.xml" />
 		<mapping resource="com/metasocio/hibernate/commentsmanagement/CommentDatabaseMapping.xml" />
 		<mapping resource="com/metasocio/hibernate/likesmanagement/LikeDatabaseMapping.xml"/>
+		
 
 	</session-factory>
 </hibernate-configuration>

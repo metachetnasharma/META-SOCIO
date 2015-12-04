@@ -32,7 +32,7 @@ public class UserService {
 
 			System.out
 					.println("************************************************is exists");
-			isUserExists = iUserFacade.isEmailExists(email, transaction, session);
+			isUserExists = iUserFacade.isEmailExists(email, session);
 			System.out
 					.println("************************************************ exists");
 			// int id = vehicleDao.getId(connection);
@@ -84,7 +84,7 @@ public class UserService {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 
-			iUserFacade.setUserInfo(user, transaction, session);
+			iUserFacade.setUserInfo(user,session);
 			// int id = vehicleDao.getId(connection);
 			// vehicleDao.createCar(id, vehicle, connection);
 			transaction.commit();
@@ -113,7 +113,7 @@ public class UserService {
 
 	}
 
-	public List<User> getUsersHavingSameDepartment(int userId)
+	public List<User> getUsersHavingSameDepartment(User user)
 			throws MetaSocioSystemException {
 		Session session = null;
 		// boolean isUserExists=false;
@@ -132,7 +132,7 @@ public class UserService {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 			usersOfSameDepartment = iUserFacade.getUsersHavingSameDepartment(
-					userId, transaction, session);
+					user, session);
 			transaction.commit();
 
 		} catch (Exception e) {
@@ -159,7 +159,7 @@ public class UserService {
 		return usersOfSameDepartment;
 	}
 
-	public int getIdByEmail(String email) throws MetaSocioSystemException {
+	/*public int getIdByEmail(String email) throws MetaSocioSystemException {
 		Session session = null;
 		// boolean isUserExists=false;
 		Transaction transaction = null;
@@ -177,7 +177,7 @@ public class UserService {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 
-			userId = iUserFacade.getIdByEmail(email, transaction, session);
+			userId = iUserFacade.getIdByEmail(email, session);
 			transaction.commit();
 
 		} catch (Exception e) {
@@ -221,7 +221,7 @@ public class UserService {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 
-			userName = iUserFacade.getNameById(userId, transaction, session);
+			userName = iUserFacade.getNameById(userId, session);
 			transaction.commit();
 
 		} catch (Exception e) {
@@ -265,7 +265,7 @@ public class UserService {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 
-			userImage = iUserFacade.getImageById(userId, transaction, session);
+			userImage = iUserFacade.getImageById(userId, session);
 			transaction.commit();
 
 		} catch (Exception e) {
@@ -289,5 +289,93 @@ public class UserService {
 			}
 		}
 		return userImage;
+	}*/
+
+	public User getUserByEmail(String email) throws MetaSocioSystemException {
+		Session session = null;
+		// boolean isUserExists=false;
+		Transaction transaction = null;
+		User user;
+		try {
+			Configuration cfg =ConfigurationFactory.getConfigurationInstance();
+
+			//Configuration cfg = new Configuration();
+			//cfg.configure("hibernate.cfg.xml");
+			//MetaSocio_Facade iFacade = new MetaSocio_Facade();
+            UserFacade iUserFacade=new UserFacade();
+
+			SessionFactory sessionFactory = cfg.buildSessionFactory();
+
+			session = sessionFactory.openSession();
+			transaction = session.beginTransaction();
+
+			user = iUserFacade.getUserByEmail(email, session);
+			transaction.commit();
+
+		} catch (Exception e) {
+
+			System.out.println("[" + e.getMessage() + "]");
+			try {
+				transaction.rollback();
+				System.out.println("Transaction roll back");
+				throw new MetaSocioSystemException("Transaction roll back,["
+						+ e.getMessage() + "]", e);
+			} catch (Exception e1) {
+				System.out.println("error in transactiopn roll back,["
+						+ e1.getMessage() + "]");
+				throw new MetaSocioSystemException("[" + e.getMessage()
+						+ "];error in transactiopn roll back,["
+						+ e1.getMessage() + "]", e);
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return user;
+	}
+
+	public User getUserById(int followingId) throws MetaSocioSystemException {
+		Session session = null;
+		// boolean isUserExists=false;
+		Transaction transaction = null;
+		User user;
+		try {
+			Configuration cfg =ConfigurationFactory.getConfigurationInstance();
+
+			//Configuration cfg = new Configuration();
+			//cfg.configure("hibernate.cfg.xml");
+			//MetaSocio_Facade iFacade = new MetaSocio_Facade();
+            UserFacade iUserFacade=new UserFacade();
+
+			SessionFactory sessionFactory = cfg.buildSessionFactory();
+
+			session = sessionFactory.openSession();
+			transaction = session.beginTransaction();
+
+			user = iUserFacade.getUserById(followingId, session);
+			transaction.commit();
+
+		} catch (Exception e) {
+
+			System.out.println("[" + e.getMessage() + "]");
+			try {
+				transaction.rollback();
+				System.out.println("Transaction roll back");
+				throw new MetaSocioSystemException("Transaction roll back,["
+						+ e.getMessage() + "]", e);
+			} catch (Exception e1) {
+				System.out.println("error in transactiopn roll back,["
+						+ e1.getMessage() + "]");
+				throw new MetaSocioSystemException("[" + e.getMessage()
+						+ "];error in transactiopn roll back,["
+						+ e1.getMessage() + "]", e);
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return user;
 	}
 }

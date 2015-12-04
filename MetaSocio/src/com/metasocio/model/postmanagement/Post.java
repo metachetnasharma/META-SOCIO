@@ -1,9 +1,9 @@
 package com.metasocio.model.postmanagement;
 
 import java.sql.Timestamp;
-
 import java.util.Date;
 
+import com.metasocio.model.groupmanagement.Group;
 import com.metasocio.model.usermanagement.User;
 
 import lombok.Data;
@@ -17,24 +17,39 @@ import lombok.Data;
 public class Post
 {
 	// To store post id
-	int postId;
+	private	int postId;
 	// To store Post Details
-	String postDetails;
+	private	String postDetails;
 	// To store GroupId
-	int groupId;
+	
 	// to store Date
-	Date datePosted;
+	private	Date datePosted;
 	// To store Likes
-	int likes;
+	private	int likes;
 	// To store Update At
-	Timestamp updatedAt;
+	private	Timestamp updatedAt;
 	// To store CreatedBy
-	String createdBy;
+	private	String createdBy;
 	// To store UpdateBy
-	String updatedBy;
+	private	String updatedBy;
 	// to store is Delete Field
-	int isdelete;
-     User user;
+	private	int isDelete;
+	private  User user;
+	private int groupId;
+	public int getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+	/*private  Group group;
+	
+	public Group getGroup() {
+		return group;
+	}
+	public void setGroup(Group group) {
+		this.group = group;
+	}*/
 	/**
 	 * @return the postId
 	 */
@@ -62,15 +77,7 @@ public class Post
 	/**
 	 * @return the groupId
 	 */
-	public int getGroupId() {
-		return groupId;
-	}
-	/**
-	 * @param groupId the groupId to set
-	 */
-	public void setGroupId(int groupId) {
-		this.groupId = groupId;
-	}
+	
 	/**
 	 * @return the datePosted
 	 */
@@ -134,14 +141,14 @@ public class Post
 	/**
 	 * @return the isdelete
 	 */
-	public int getIsdelete() {
-		return isdelete;
+	public int getIsDelete() {
+		return isDelete;
 	}
 	/**
 	 * @param isdelete the isdelete to set
 	 */
-	public void setIsdelete(int isdelete) {
-		this.isdelete = isdelete;
+	public void setIsDelete(int isdelete) {
+		this.isDelete = isdelete;
 	}
 	/**
 	 * @return the user
@@ -155,5 +162,6 @@ public class Post
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
 	
 }

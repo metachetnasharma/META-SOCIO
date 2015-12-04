@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
-<%@page import="com.metasocio.model.usermanagement.User"%>
 <%@page import="com.metasocio.model.usermanagement.GooglePojo"%>
+<%@ page import="java.io.*,java.util.*" %>
 <html lang="en">
 
 <head>
@@ -45,12 +45,7 @@
 
 
 <body id="page-top">
-
-
- <%@ page session="false"%>
      <%@ page errorPage="../../exception/error.jsp"%>
-	
-
     <!-- Navigation -->
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
     <nav class="navbar navbar-inverse navbar-fixed-top navbar-expanded" style="background-color: black">
@@ -63,7 +58,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll hidden-sm"  href="#page-top">
+                <a class="navbar-brand page-scroll hidden-sm"  href="HomePage">
                     <img src="assets/img/logo.png" class="img-responsive hidden-sm" alt="">
                 </a>
             </div>
@@ -74,11 +69,11 @@
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="what-is-META-SOCIO.html">What is Meta-Socio</a>
+                        <a class="page-scroll" href="what-is-META-SOCIO.jsp">What is Meta-Socio</a>
                     </li>
                     
                     <li>
-                        <a class="page-scroll" href="LogOut">Logout</a>
+                        <a class="page-scroll" href="#pricing">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -99,9 +94,17 @@
              <form name="sentMessage" action="CreateUserProfile" id="contactForm" method="post">
                 <div class="col-lg-8">
                    
-                    <%GooglePojo userDataObject=new GooglePojo();
-                    userDataObject=(GooglePojo)request.getAttribute("userDataObject") ;%>
-
+                    <%
+                   
+                    
+                    
+                    GooglePojo userDataObject=new GooglePojo();
+                    userDataObject=(GooglePojo)request.getAttribute("userDataObject") ;
+                    session.setAttribute("userProfile", userDataObject);
+                    
+                   
+                    %>
+					
 
 
 						<div class="panel-group" id="accordion">
@@ -116,14 +119,18 @@
 									<div class="panel-body">
 										<div class="row control-group">
 											<div class="form-group col-xs-6 floating-label-form-group controls" style="border-left:1px solid #e1e1e1;border-right:1px solid #e1e1e1">
-												<label>Name</label> <input type="text" class="form-control"
-													style="background-color: transparent; font-weight: bolder;"
-													value="<%=userDataObject.getName()%>"
+												<label>Name</label>
+												 
+												 <input type="text" class="form-control" required = "required"
+													style="background-color: transparent; font-weight: bolder;" value="<%=userDataObject.getName()%>" 
+													
 													<%
-														if(userDataObject.getName()!=null){
-															%>readonly="readonly"<%		
+														if(userDataObject.getName().equalsIgnoreCase(" ")){
+															%>readonly<%		
 														}
-													%>
+														%>
+													
+													
 													
 													placeholder="Name" name="name" required="required">
 												<p class="help-block text-danger"></p>
@@ -173,7 +180,7 @@
 								<div class="panel-heading">
 									<h4 class="panel-title">
 										<a data-toggle="collapse" data-parent="#accordion"
-											href="#collapseTwo">2. Work and Education</a>
+											href="#collapseTwo" style="color:orangered">2. Work and Education (Compulsory)</a>
 									</h4>
 								</div>
 								<div id="collapseTwo" class="panel-collapse collapse">
@@ -193,7 +200,7 @@
 												<p class="help-block text-danger"></p>
 											</div>
 										</div>
-										
+										 <input type="hidden" value="<%=userDataObject.getPicture()%>" name="picture">
 										<div class="row control-group">
 											<div class="form-group col-xs-6 floating-label-form-group controls" style="border-left:1px solid #e1e1e1;border-right:1px solid #e1e1e1">
 												<label>College</label> <input type="text" class="form-control"
@@ -308,27 +315,30 @@
 									</div>
 								</div>
 							</div>
+						
+						<div class="col-lg-12">
+            			<input type="submit" class="btn btn-outline-dark" value="Save">
+            			</div>
+						</form>
 						</div>
+						
 						<div class="col-lg-4">
                 			<div class="row control-group">
                             <div class="form-group col-xs-12 floating-label-form-group controls">
-                                <label>Profile Picture</label>
+                                
                                <img class="img-responsive" src="<%=userDataObject.getPicture()%>" >
-                              
-                                <p class="help-block text-danger"></p>
+								
+								<form action="PhotoUpload" method="post" enctype="multipart/form-data">
+										<input type="file" name="file" size="50" />
+										<br />
+										<input type="submit" value="Upload File" />
+								</form>
                             </div>
                         </div>
                 		</div>
                 		
                 		
-                		 <div class="row">
-            	<div class="col-lg-8 col-lg-offset-2">
-            	
-            		<input type="submit" class="btn btn-outline-dark" value="Save">
-            		
-            	</div>
-            </div>
-            </form>
+                		
             
             </div>
            
@@ -367,7 +377,6 @@
         autoclose: true
     });
         </script>
-       
 </body>
 
 </html>

@@ -34,11 +34,11 @@ public class PostDao
 	public static PostDao getInstance() 
 	{
 		// checks the object
-		if (iPostDao == null) 
-		{
+		/*if (iPostDao == null) 
+		{*/
 			iPostDao = new PostDao();
 
-		}
+		/*}*/
 		return iPostDao;
 	}
 	/**
@@ -48,7 +48,7 @@ public class PostDao
 	 * @param session: session to be updated
 	 * @throws MetaSocioException
 	 */
-	public void addPost(Post newPost, Transaction transaction,Session session) throws MetaSocioException
+	public void savePost(Post newPost,Session session) throws MetaSocioException
 	{
 		// save the data to the database
 		session.saveOrUpdate(newPost);
@@ -62,12 +62,13 @@ public class PostDao
 	 * @throws MetaSocioException
 	 * Description: retrive image 
 	 **/
-	public List<Post> retrievePostWithImageOnHome(Transaction transaction,Session session) throws MetaSocioException
+	public List<Post> retrievePostWithImageOnHome(Session session) throws MetaSocioException
 	{
 		// Query with session to update
 		Query query = session.createQuery("select pm.postId, pm.postDetails, pm.groupId, pm.datePosted, pm.likes,"
-				+ "pm.updatedAt, pm.createdBy, pm.updatedBy, pm.isdelete, pm.user from Post pm order by pm.datePosted desc ");
+				+ "pm.updatedAt, pm.createdBy, pm.updatedBy, pm.isDelete, pm.user from Post pm WHERE pm.isDelete=:isdelete order by pm.datePosted desc ");
 		// getting the object with rows 
+		query.setInteger("isdelete", 0);
 		List<Object[]> rows=query.list();
 		// getting the post with image
 		  List<Post> postsWithImage = new ArrayList<Post>();
@@ -84,7 +85,7 @@ public class PostDao
 		    post.setUpdatedAt( (Timestamp) row[5]);
 		    post.setCreatedBy((String) row[6]);
 		    post.setUpdatedBy((String) row[7]);
-		    post.setIsdelete((int) row[8]);
+		    post.setIsDelete((int) row[8]);
 		    post.setUser((User) row[9]);
 		    System.out.println(post.getUser().getUserId()+post.getUser().getImageURL()+"post"+post.getPostId()+"---------------------------------------");
 		    postsWithImage.add(post);
@@ -92,7 +93,7 @@ public class PostDao
 		// returns the list with post image
 		return postsWithImage;
 	}
-	/**
+	/**bv         
 	 * Name: incrementLikesOnPost
 	 * @param postId
 	 * @param transaction
@@ -113,10 +114,26 @@ public class PostDao
 	 * @param session
 	 * @throws MetaSocioException
 	 */
-	public void decrementLikesOnPost(int postId, Transaction transaction,Session session)  throws MetaSocioException 
+	public void decrementLikesOnPost(int postId,Session session)  throws MetaSocioException 
 	{
 		// Descrement the likes on post
-		Query updateLike = session.createQuery("UPDATE Post as pm SET pm.likes = pm.likes - 1 WHERE pm.postId = "+postId+"");
-		updateLike.executeUpdate();
+		Query updateNoOfLikes = session.createQuery("UPDATE Post as pm SET pm.likes = pm.likes - 1 WHERE pm.postId = "+postId+"");
+		updateNoOfLikes.executeUpdate();
+	}
+
+	public void deletePostByPostId(int postId, Session session) throws MetaSocioException  {
+		Query updateIsDelete = session.createQuery("UPDATE Post as p SET p.isDelete "
+				+ "= "+ 1 +" WHERE p.postId = "+postId+""); 		//Preparing query to update required field
+		updateIsDelete.executeUpdate();	
+		
+	}
+
+	public void editPostByPostId(int postId, String postDetails, Session session) throws MetaSocioException  {
+		Query editPost = session.createQuery("UPDATE Post as p SET p.postDetails=:postDetails WHERE p.postId = "+postId+""); 
+		editPost.setString("postDetails", postDetails);
+		//Preparing query to update required field
+		editPost.executeUpdate();	
+		
+		
 	}
 }

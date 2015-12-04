@@ -22,9 +22,13 @@
 		<property column="updated_at" name="updatedAt" type="timestamp" />
 		<property column="created_by" name="createdBy" type="string" />
 		<property column="updated_by" name="updatedBy" type="string" />
-		<property column="isdelete" name="isdelete" type="int" />
+		<property column="isdelete" name="isDelete" type="int" />
 		
 		<many-to-one name="user" column="user_id_who_posted" unique="true"  
        class="com.metasocio.model.usermanagement.User" /> 
+       
+      
+       
+       
 	</class>
 	</hibernate-mapping>

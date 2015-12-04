@@ -69,9 +69,27 @@
                         <a class="page-scroll" href="#">What is Meta-Socio</a>
                     </li>
                    
+                   
+                  
+                   <%HttpSession session=request.getSession(false);
+            		
+            		if(session==null){
+            		%>
                     <li>
                         <a class="page-scroll" href="https://accounts.google.com/o/oauth2/auth?scope=email&amp;redirect_uri=http://localhost:8080/MetaSocio/OAuth&amp;response_type=code&amp;client_id=881126743057-0u1nhaqo1uk2dl0h0e9mpe3f9ptvmsa6.apps.googleusercontent.com&amp;approval_prompt=force&hd=metacube.com"">Log-in</a>
                     </li>
+                    <%}else{ %>
+                    
+                      <li>
+                        <a class="page-scroll" href="HomePage">Home</a>
+                    </li>
+                   
+                   
+                   
+                    <li>
+                        <a class="page-scroll" href="LogOut">Log Out</a>
+                    </li>
+                   <%} %>
                    
                 </ul>
             </div>

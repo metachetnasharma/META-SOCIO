@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.metasocio.model.grouprmanagement.Group" table="user">
+
+  <id column="group_id" name="groupId" type="int" >
+		<generator class="native"/>
+		</id>
+		
+		
+		
+		<property column="created_at" name="createdAt" type="timestamp" />
+		<property column="updated_at" name="updatedAt" type="timestamp" />
+		<property column="created_by" name="createdBy" type="string" />
+		<property column="updated_by" name="updatedBy" type="string" />
+		<property column="isdelete" name="isDelete" type="int" />
+		
+        <many-to-one name="user" column="user_id_who_created_group" unique="true"  
+       class="com.metasocio.model.usermanagement.User" /> 
+       
+       
+        <set name="posts" cascade="persist" lazy="false" inverse="false">
+            <key column="post_id" />
+            <one-to-many class="com.metasocio.model.postmanagement.Post" />
+        </set>
+	</class>
+	
+	
+	
+
+</hibernate-mapping>
+
+
+

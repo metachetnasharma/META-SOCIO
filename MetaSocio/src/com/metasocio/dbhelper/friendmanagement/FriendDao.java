@@ -22,15 +22,15 @@ public class FriendDao {
 
 	public static FriendDao getInstance() {
 
-		if (iFriendDao == null) {
+		/*if (iFriendDao == null) {*/
 			iFriendDao = new FriendDao();
 
-		}
+		/*}*/
 		return iFriendDao;
 	}
 	
-	public List<User> getUsersWhoAreNotFriends(int userId, List<User> users,
-			Transaction transaction, Session session) throws MetaSocioException {
+	public List<User> getUsersWhomYouAreNotFollowing(int userId, List<User> users,
+			Session session) throws MetaSocioException {
 		// Criteria criteria = session.createCriteria(Friends.class);
 		List<User> usersList = new ArrayList<User>();
 		Query query;
@@ -62,7 +62,7 @@ public class FriendDao {
 	
 	
 	public void addFriend(Friend friend, Friend secondFriend,
-			Transaction transaction, Session session) throws MetaSocioException {
+			Session session) throws MetaSocioException {
 		session.save(friend);
 		
 		session.save(secondFriend);

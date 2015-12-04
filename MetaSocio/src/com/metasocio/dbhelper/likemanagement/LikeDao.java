@@ -1,9 +1,13 @@
 package com.metasocio.dbhelper.likemanagement;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+
 import com.metasocio.exception.MetaSocioException;
 import com.metasocio.model.likemanagement.Like;
+import com.metasocio.model.postmanagement.Post;
 
 /**
  * @author 
@@ -29,9 +33,9 @@ public class LikeDao {
 	 ************************************************************/
 	public static LikeDao getInstance() {
 		//Checking if instance already exists
-		if (iLikeDao == null) {
+		/*if (iLikeDao == null) {*/
 			iLikeDao = new LikeDao(); 		//Creating instance of this class
-		}
+		/*}*/
 		return iLikeDao;		//Returning instance of this class
 	}
 
@@ -66,5 +70,23 @@ public class LikeDao {
 		Query updateIsLiked = session.createQuery("UPDATE Like as lk SET lk.isLiked "
 				+ "= "+ hasDeleted +" WHERE lk.postId = "+postId+" and lk.likerId=" + userId+""); 		//Preparing query to update required field
 		updateIsLiked.executeUpdate();				//Executing updates		
+	}
+
+	public void deleteLikeOnPost(int postId, Session session) throws MetaSocioException {
+		Query updateIsLiked = session.createQuery("UPDATE Like as lk SET lk.isLiked "
+				+ "= "+ 1 +" WHERE lk.postId = "+postId+""); 		//Preparing query to update required field
+		updateIsLiked.executeUpdate();	
+		
+	}
+
+	public int LikesOnPostByPostId(int postId, Session session) throws MetaSocioException {
+		Criteria criteria = session.createCriteria(Post.class);
+		criteria.add(Restrictions.eq("postId", postId));
+		Post post = new Post();
+		post = (Post) criteria.uniqueResult();
+		int noOfLikes = post.getLikes();
+		// System.out.println("*******************************department="+department);
+		return noOfLikes;
+		
 	}
 }

@@ -7,7 +7,7 @@
   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-<class name="com.metasocio.model.likemanagement.Like" table="likeCounter">
+<class name="com.metasocio.model.likemanagement.Like" table="likes">
 
   <id column="counter" name="counter" type="int" >
 		<generator class="native"/>

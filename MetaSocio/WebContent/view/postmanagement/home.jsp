@@ -12,6 +12,10 @@
 <html lang="en">
 
 <head>
+
+<style>
+
+</style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="description" content="">
@@ -22,7 +26,7 @@
     <!-- Retina.js - Load first for faster HQ mobile images. -->
     <script src="assets/js/plugins/retina/retina.min.js"></script>
     <!-- Font Awesome -->
-    <link href="assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <!-- Default Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,600,500,700,800,900' rel='stylesheet' type='text/css'>
@@ -40,8 +44,12 @@
     <link href="assets/css/plugins/background.css" rel="stylesheet" type="text/css">
     <link href="assets/css/plugins/animate.css" rel="stylesheet" type="text/css">
     <link id="changeable-colors" rel="stylesheet" href="assets/css/vitality-red.css">
-    <link href="assets/demo/style-switcher.css" rel="stylesheet">
+    
     <link href="assets/css/custom.css" rel="stylesheet">
+       <script src="assets/js/search.js"></script>
+       <script type="text/javascript" src="assets/js/jquery-1.11.3.js"></script>
+        <script src="assets/js/custom.js"></script>
+        <script src="assets/js/like.js"></script>
     <!-- IE8 support for HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -57,12 +65,13 @@
     <!-- Note: navbar-default and navbar-inverse are both supported with this theme. -->
         <nav class="navbar navbar-inverse navbar-fixed-top navbar-expanded" style="background-color: black">
         <div class="container">
-        <%User userObject=new User();
-                        userObject=(User)request.getAttribute("userObject");
+        <%HttpSession session=request.getSession(false);
+              User userObject=new User();
+                        userObject=(User)session.getAttribute("userObject");
                        
-                      //  int id = (int)request.getAttribute("id"); 
-                     HttpSession session=request.getSession(false);
-                     session.setAttribute("userObject", userObject);
+                      
+                    /*  HttpSession session=request.getSession(false);
+                     session.setAttribute("userObject", userObject); */
                       %>
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -82,14 +91,27 @@
                     <li class="hidden">
                         <a class="page-scroll" href="#page-top"></a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#about">What is Meta-Socio</a>
+                    <li style="width:600px;">
+                    	<input type="text" name="searchUsersByKey" class="form-control" id="search" onkeyup="searchUsersByKey()" onfocus="displayBlock()" placeholder="Search People" style="margin-top: 10px;width: 600px;">
+                    	<div id="searchBlock"  style="display: none;width: 600px;height:500px;position:absolute;background-color: white;overflow-y:scroll;overflow-x:hidden">
+                    		
+                    		
+                    		
+                    	</div>
                     </li>
                     <li>
-                        <a class="page-scroll" href="Followers">Follower</a>
+                        <a class="page-scroll" href="AboutMetaSocio">What is Meta-Socio</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#pricing">Log-in/Logout</a>
+                        <a class="page-scroll" href="Followers">Followers</a>
+                    </li>
+                    
+                     <li>
+                        <a class="page-scroll" href="Followings">Followings</a>
+                    </li>
+                    
+                    <li>
+                        <a class="page-scroll" href="LogOut">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -100,7 +122,7 @@
     <section id="about" style="margin-top:3%; background-color: #E9EAED;">
         <div class="container-fluid">
         <div  class="col-lg-2" >
-            	<img src=<%=userObject.getImageURL()%>height="200px" width="200px">
+            	<img src="<%=userObject.getImageURL()%>" height="200px" width="200px">
             	<br>
             	<label><%=userObject.getName() %></label>
           </div>
@@ -111,7 +133,7 @@
                 <div class="col-lg-8 wow fadeIn">
                     <div class="form-group col-xs-12 col-lg-12 floating-label-form-group controls" style="border-color: orange;">
                           <label>What's on your mind ? </label> 
-                               <textarea  class="form-control"  placeholder="What's on your mind ? " name="post" required data-validation-required-message="Please enter your role." style="background-color: white; width:"></textarea>
+                               <textarea  class="form-control"  placeholder="What's on your mind ? " name="post" style="background-color: transparent" required="required"></textarea>
                     </div>
             	</div>
             	<div class="col-lg-7 wow fadeIn">
@@ -176,9 +198,10 @@
 					
 					<% 	
 					Map<Post, List<Comment>> postMap  = (Map)request.getAttribute("postMap"); 
+					Map<Post, Boolean> likeMap  = (Map)request.getAttribute("likeMap"); 
 					//Map<Integer,String> imageMapForPostedUsers = (Map)request.getAttribute("imageMapForPostedUsers"); 
 					//Map<Integer,String> imageMapForCommentedUsers = (Map)request.getAttribute("imageMapForCommentedUsers"); 
-					if(postMap != null)
+					if(!postMap.isEmpty())
 					{
 						 Iterator iterator = postMap.keySet().iterator();
 
@@ -187,26 +210,264 @@
 					      List<Comment> commentList = null;
 					      commentList = postMap.get(post);
 					     %>
+					     
+					     
+					     
+					     
+					     
+					     
+					    
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+					  
+         
+         
+         
+         
+         
+         
+         
+         
+         <form  id="editForm" method="post" hidden="hidden">
+					  <div class="row text-center" >
+            <input type="hidden" id="postId" value="">
+            <input type="hidden" id="commentId" value="">
+                <div class="col-lg-8 wow fadeIn">
+                    <div class="form-group col-xs-12 col-lg-12 floating-label-form-group controls" style="border-color: orange;">
+                         <label>Edit</label> 
+                               <textarea  class="form-control"  placeholder="Edit" id="editContent" value="hi" style="background-color: transparent" required="required"></textarea>
+                    </div>
+            	</div>
+            	<div class="col-lg-7 wow fadeIn">
+                    <div class="form-group col-xs-12" style="margin-top:1%">
+                           <input type="submit" class="btn btn-outline-dark " value="Edit"/>
+                    </div>
+                    </div>
+            </div>
+            
+            </form>
+					  
+                    
+					  <!-- <label>Edit</label>
+					 <textarea  class="form-control"  placeholder="Edit" id="editContent" style="background-color: transparent" required="required"></textarea>
+					     --> 
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
+					     
 					<div class="row  padding-small rounded-corner" style="background-color:white; margin-top: 2%;">
 						<div class="col-md-2">
 							
-							<img src=<%=post.getUser().getImageURL() %> height="100px" width="100px">
+							<img src="<%=post.getUser().getImageURL() %>" height="100px" width="100px">
 						</div>
 						<div class="col-md-10">
 							<p>
-								<strong> <%=post.getCreatedBy()%></strong> <span style=" color: orange">Posted</span> 
+								<strong> <%=post.getCreatedBy()%></strong> <span style=" color: orange">Posted</span>
+								
+								<%if(userObject.getUserId()==post.getUser().getUserId()){ %>
+								
+								<%--  <a href="#" role="button" class="btn popovers"
+												data-toggle="popover" title="Edit"
+												data-content="<ul><li><a href='EditPost?postId=<%=post.getPostId()%>'>Edit Post</a></li><li><a href='DeletePost?postId=<%=post.getPostId()%>'>Delete Post</a></li></ul>"
+												data-original-title="test title"><i class="fa fa-pencil-square-o fa-2x"></i></a> --%>
+
+
+
+
+
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <input type="hidden" id="<%=post.getPostId()%>" value="<%=post.getPostDetails()%>">
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+
+
+
+
+
+
+
+
+								<a href="#" role="button" class="btn popovers"
+									data-toggle="popover" title="Edit"
+									data-content="<ul><li><a href='javascript:editPost(<%=post.getPostId()%>)'>Edit Post</a></li><li><a href='DeletePost?postId=<%=post.getPostId()%>'>Delete Post</a></li></ul>"
+									data-original-title="test title"><i
+									class="fa fa-pencil-square-o fa-2x"></i></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								<%
+									}
+								%>
 							</p>
 							<h3>
-								<i><p style="word-break: break-all;" ><%=post.getPostDetails() %></p></i>
-							</h3>
-							<%if(post.getLikes() > 0)
-							{
-								out.println(post.getLikes());
-							} %>
 							
-								<a><i class="fa fa-thumbs-up"></i></a>
+								<i><p style="word-break: break-all;" id="post<%=post.getPostId()%>"><%=post.getPostDetails() %></p></i>
+							</h3>
+							
+							
 								
-							<a href="LikeManager?postID=<%=post.getPostId()%>" class="button"><i class="fa fa-thumbs-up"></i>likes </a>
+						<%-- 		
+							<!--  <a href="LikeManager?postID=<%=post.getPostId()%>" class="button">-->
+							<button  id ="like<%=post.getPostId()%>" onClick="loadInfo(<%=post.getPostId()%>)" value=<%=post.getPostId()%> ><span id= "demo<%=post.getPostId()%>">  <%=post.getLikes()%><i class="fa fa-thumbs-up" style="color:grey"></i></span></button></button>
+							
+							<%
+								if(likeMap.get(post)){
+									%>
+									
+									
+							<i class="fa fa-thumbs-up" style="color:orange"></i>Like</a><span class="badge">
+							
+							<%
+								out.println(post.getLikes());
+							 %> 
+								</span>	
+									<%
+								}
+								else{
+								%>
+								<!-- <span id= "demo<%=post.getPostId()%>">  <%=post.getLikes()%></span></button>  -->
+								<i class="fa fa-thumbs-up" style="color:grey"></i>Like</a><span class="badge">
+							
+							<%
+								out.println(post.getLikes());
+							 %> 
+								
+								<%	
+								}
+							
+							%>
+							</span>
+							 --%>
+							
+							
+							
+							
+							
+							
+							<%
+								if(likeMap.get(post)){
+									%>
+									
+									
+							<span id= "demo<%=post.getPostId()%>">
+							
+							
+							<a href="#">
+							<i class="fa fa-thumbs-up" id ="like<%=post.getPostId()%>" onClick="loadInfo(<%=post.getPostId()%>)" value="<%=post.getPostId()%>" style="color:grey"></i></a>
+							
+							
+							
+							
+							<%=post.getLikes()%>
+							
+							
+							
+							
+							
+							</span>
+							
+							
+							<%}else{
+								%>
+								
+								
+								
+								
+								
+								
+								
+								
+							<span id= "demo<%=post.getPostId()%>">
+							
+							<a href="#">
+							<i class="fa fa-thumbs-up" id ="like<%=post.getPostId()%>" onClick="loadInfo(<%=post.getPostId()%>)" value="<%=post.getPostId()%>" style="color:orange"></i></a>
+							
+							<%=post.getLikes()%>
+							
+							
+							
+							
+							</span>
+							
+							
+							<%} %>
+							
+							
+							
+							 
+							 
+							 
+							 
+							 
+							
 							
 							
 						
@@ -217,14 +478,70 @@
 							<div class="col-md-12" >
 								<div class="row rounded-corner padding-smallComment" id="comment" style="margin-top:2%;background-color: #F6F7F8;">
 									<div class="col-md-2">
-										<img src=<%=comment.getUser().getImageURL()%> height="50px" width="50px">
+										<img src="<%=comment.getUser().getImageURL()%>" height="50px" width="50px">
 									</div>
 									<div class="col-md-10">
 										<p>
-								<b> <i><%=comment.getCreatedBy()%></i></b><span Style="color:blue; margin-left: 1%;">Commented</span>
-							</p>
+								<b> <i><%=comment.getCreatedBy()%></i></b><span Style="color:blue; margin-left: 1%;">Commented</span> 
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+							
+							
+								
+								<input type="hidden" id="commentId<%=comment.getCommentId()%>" value="<%=comment.getComments()%>">
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								
+								<%if(userObject.getUserId()==comment.getUser().getUserId()){ %>
+								<a href="#" role="button" class="btn popovers"
+												data-toggle="popover" title="Edit"
+												data-content="<ul><li><a href='javascript:editComment(<%=comment.getCommentId()%>)'>Edit Comment</a></li><li><a href='DeleteComment?commentId=<%=comment.getCommentId()%>'>Delete Comment</a></li></ul>"
+												data-original-title="test title"><i class="fa fa-pencil-square-o fa-2x" ></i></a>
+
+                                       <%} %>
+								
+
+
+
+
+
+
+
+										</p>
 										
-											<p style="word-break: break-all;" ><%=comment.getComments() %></p>
+											<p style="word-break: break-all;" id="comment<%=comment.getCommentId() %>"><%=comment.getComments() %></p>
 										
 										
 									</div>
@@ -233,18 +550,37 @@
 							</div>
 						<%} %>
 						<form action="AddComment?postID=<%out.println(post.getPostId()); %>" method="post">
-										<textarea name="comment" placeholder="Add your comments here" class="form-control"></textarea>
+										<textarea name="comment" placeholder="Add your comments here" class="form-control" required="required"></textarea>
 										<button type="submit" class="btn btn-outline-dark btn-small" style>comment</button>
 											</form>
 						</div>
+						<div class="col-md-12">
+							
+						</div>
 						</div>
 						<%} %>
-						<%} %>
-						<a href="_blank" class="button">loadMore</a>
+							<div class="row">
+							<div class="col-md-12 text-center">
+									<a href="_blank" class="btn btn-outline-dark text-center">loadMore</a>		
+							</div>
+						</div>
+						<%}
+					else{
+						%>
+							<div class="row text-center">
+								<div class="col-md-12">
+									<p>There are no post to show.</p>
+								</div>
+							</div>
+						<%
+					}
+					%>
+						
+						
 				</div>
-                <div class="col-md-3 col-sm-6 col-lg-2 wow fadeIn" data-wow-delay=".8s">
+                <div class="col-md-3 col-sm-6 col-lg-2 wow fadeIn" data-wow-delay=".8s" id="result">
                     <div class="about-content">
-                        <i class="fa fa-heart fa-4x"></i>
+                        <i class="fa fa-users fa-4x"></i>
                         <h3>Suggested People</h3>
                         
                         <%// String email =(String) request.getAttribute("email");%>
@@ -261,7 +597,32 @@
                         			   %>	
                         			    <div class="row" style="margin-bottom: 20px">
                         				<div class="col-md-8"><%=userOfSameDepartment.getName()%></div>
-                        				<div class="col-md-4"><a href="AddFriend?userId=<%=userObject.getUserId()%>&friendId=<%=userOfSameDepartment.getUserId()%>"><button class="btn btn-sm btn-outline-dark">Add</button></a></div>
+                        				<div class="col-md-4">
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				 <a href="FollowPeople?followingId=<%=userOfSameDepartment.getUserId()%>"><button class="btn btn-sm btn-outline-dark">Follow</button></a>
+                        				<%-- <button class="btn btn-sm btn-outline-dark" onclick="followPeople(<%=userOfSameDepartment.getUserId()%>,'<%=userObject.getEmailId() %>')" value="Follow">Follow</button> --%>
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				
+                        				</div>
                         				</div>
                         <%		}
                         	}
@@ -271,6 +632,10 @@
             </div>
         </div>
     </section>
+    
+    
+    
+    
     <!-- End Style Switcher -->
     <!-- Core Scripts -->
     <script src="assets/js/jquery.js"></script>
@@ -292,6 +657,26 @@
     <script src="assets/js/vitality.js"></script>
     <!-- Style Switcher Scripts - Demo Purposes Only! -->
     <script src="assets/demo/style.switcher.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#search").keypress(function(){
+            $("#searchBlock").css("display", "list-item");
+        });
+        $("#search").focusout(function(){
+            $("#searchBlock").css("display", "none");
+        });
+    });
+    </script>
+    
+    <script type="text/javascript">
+										
+								
+								$("[data-toggle=popover]")
+								.popover({html:true})
+								
+								
+								
+								</script>
     
     
 </body>

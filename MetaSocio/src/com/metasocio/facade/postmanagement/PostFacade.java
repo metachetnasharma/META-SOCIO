@@ -8,6 +8,8 @@ import org.hibernate.Transaction;
 
 import com.metasocio.dbhelper.postmanagement.PostDao;
 import com.metasocio.exception.MetaSocioException;
+import com.metasocio.facade.commentmanagement.CommentFacade;
+import com.metasocio.facade.likemanagement.LikeFacade;
 import com.metasocio.model.postmanagement.Post;
 import com.metasocio.modelhelper.ImageHelper;
 /**
@@ -26,13 +28,13 @@ public class PostFacade
 	 * @throws MetaSocioException
 	 * Description: Shares post on the home Page
 	 **/
-	public void sharePost(Post newPost, Transaction transaction, Session session)
+	public void savePost(Post newPost, Session session)
 			throws MetaSocioException 
 	{
 		// Gets the instance of the Dao
 		PostDao iPostDao = PostDao.getInstance();
 		// Adds the post And calls the addpost
-		iPostDao.addPost(newPost, transaction, session);
+		iPostDao.savePost(newPost, session);
 	}
 
 	/**
@@ -43,13 +45,13 @@ public class PostFacade
 	 * @throws MetaSocioException
 	 * Description:retrieve post from the Session
 	 **/
-	public List<Post> retrievePostWithImageOnHome(Transaction transaction, Session session) throws MetaSocioException 
+	public List<Post> retrievePostWithImageOnHome(Session session) throws MetaSocioException 
 	{
 		// Gets the Instance of Dao 
 		PostDao iPostDao = PostDao.getInstance();
 		// Gets the ArrayList
 		List<Post> postsWithImage = new ArrayList<Post>();
-		postsWithImage = iPostDao.retrievePostWithImageOnHome(transaction,session);
+		postsWithImage = iPostDao.retrievePostWithImageOnHome(session);
 		// Returns posts with image
 		return postsWithImage;
 	}
@@ -77,11 +79,33 @@ public class PostFacade
 	 * @throws MetaSocioException
 	 * Description:decrements likes on post
 	 */
-	public void decrementLikesOnPost(int postId, Transaction transaction,Session session)  throws MetaSocioException
+	public void decrementLikesOnPost(int postId,Session session)  throws MetaSocioException
 	{
 		// Gets the Instance
 		PostDao iPostDao = PostDao.getInstance();
 		// decrement likes on post
-	    iPostDao.decrementLikesOnPost(postId,transaction,session);
+	    iPostDao.decrementLikesOnPost(postId,session);
+	}
+
+	public void deletePostByPostId(int postId, Session session) throws MetaSocioException {
+		
+				PostDao iPostDao = PostDao.getInstance();
+				// decrement likes on post
+			    iPostDao.deletePostByPostId(postId,session);
+			    
+			    CommentFacade iCommentFacade=new CommentFacade();
+			    iCommentFacade.deleteCommentOnPost(postId,session);
+			    
+			    LikeFacade iLikeFacade=new LikeFacade();
+			    iLikeFacade.deleteLikeOnPost(postId,session);
+	}
+
+	public void editPostByPostId(int postId, String postDetails, Session session) throws MetaSocioException {
+		
+		PostDao iPostDao = PostDao.getInstance();
+		// decrement likes on post
+	    iPostDao.editPostByPostId(postId,postDetails,session);
+	    
+	    
 	}
 }

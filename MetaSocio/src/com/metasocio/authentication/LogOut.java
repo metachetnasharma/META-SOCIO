@@ -29,27 +29,36 @@ public class LogOut extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session=request.getSession(false);
-		if(session!=null){
+		
+		try{
+			HttpSession session=request.getSession(false);
+			if(session!=null){
+				
+				 response.setHeader("Cache-Control","no-cache");
+				 response.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
+			      response.setDateHeader("Expires", 0);
+			        response.setHeader("Pragma","no-cache"); 
+			        session.invalidate();
+			        //response.sendRedirect("home.jsp");
+			//request.getRequestDispatcher("https://mail.google.com/mail/u/0/?logout&hl=en");
+			/*request.getRequestDispatcher("index.jsp").forward(request, response);*/
+			       /* response.sendRedirect("https://mail.google.com/mail/u/0/?logout&hl=en");*/
+			        String message = "You have successfully logged out!";
+					/*response.sendRedirect("./view/Vehicle.jsp?message="
+							+ URLEncoder.encode(message, "UTF-8"));*/
+			        response.sendRedirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8080/MetaSocio/&message="
+			        		+URLEncoder.encode(message, "UTF-8"));
+			       // request.getRequestDispatcher("index.jsp").forward(request, response);
+			}
+		
+		     
+		}catch(Exception e){
+         request.setAttribute("message", "didn't log out successfully");
 			
-			 response.setHeader("Cache-Control","no-cache");
-			 response.setHeader("Cache-Control","no-store"); //Directs caches not to store the page under any circumstance
-		      response.setDateHeader("Expires", 0);
-		        response.setHeader("Pragma","no-cache"); 
-		        session.invalidate();
-		        //response.sendRedirect("home.jsp");
-		//request.getRequestDispatcher("https://mail.google.com/mail/u/0/?logout&hl=en");
-		/*request.getRequestDispatcher("index.jsp").forward(request, response);*/
-		       /* response.sendRedirect("https://mail.google.com/mail/u/0/?logout&hl=en");*/
-		        String message = "You have successfully logged out!";
-				/*response.sendRedirect("./view/Vehicle.jsp?message="
-						+ URLEncoder.encode(message, "UTF-8"));*/
-		        response.sendRedirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:8080/MetaSocio/&message="
-		        		+URLEncoder.encode(message, "UTF-8"));
-		       // request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("./exception/error.jsp").forward(
+					request, response);
 		}
-	
-	
+		
 	}
 
 	/**

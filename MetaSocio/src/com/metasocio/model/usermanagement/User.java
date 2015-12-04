@@ -2,35 +2,54 @@ package com.metasocio.model.usermanagement;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import lombok.Data;
 
-@Data
 public class User {
 
-	int userId;
-	String name;
-	String emailId;
-	String address;
-	String phoneNo;
-	String city;
-	String department;
-	String role;
-	String college;
-	String course;
-	String highSchool;
-	String stream;
-	Date dateOfBirth;
-	String gender;
-	String imageURL;
-	String about;
-	String nickName;
-	String relationshipStatus;
-	Date createdAt;
-	Timestamp updatedAt;
-	String createdBy;
-	String updatedBy;
-	int isdelete;
+	private	int userId;
+	private	String name;
+	private	String emailId;
+	private	String address;
+	private	String phoneNo;
+	private	String city;
+	private	String department;
+	private	String role;
+	private	String college;
+	private	String course;
+	private String highSchool;
+	private	String stream;
+	private	Date dateOfBirth;
+	private	String gender;
+	private	String imageURL;
+	private	String about;
+	private	String nickName;
+	private	String relationshipStatus;
+	private	Date createdAt;
+	private	Timestamp updatedAt;
+	private	String createdBy;
+	private	String updatedBy;
+	private	int isDelete;
+	private Set<User> users = new HashSet<User>(0);
+	
+	public Set<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<User> users) {
+		this.users = users;
+	}
+
+	public int getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(int isDelete) {
+		this.isDelete = isDelete;
+	}
+
 	public int getUserId() {
 		return userId;
 	}
@@ -209,14 +228,6 @@ public class User {
 		this.relationshipStatus = relationshipStatus;
 	}
 
-	public int getIsdelete() {
-		return isdelete;
-	}
-
-	public void setIsdelete(int isdelete) {
-		this.isdelete = isdelete;
-	}
-
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", name=" + name + ", emailId="
@@ -229,8 +240,12 @@ public class User {
 				+ nickName + ", relationshipStatus=" + relationshipStatus
 				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
 				+ ", createdBy=" + createdBy + ", updatedBy=" + updatedBy
-				+ ", isdelete=" + isdelete + "]";
+				+ ", isDelete=" + isDelete  + "]";
 	}
+
+	
+
+	
 
 
 }

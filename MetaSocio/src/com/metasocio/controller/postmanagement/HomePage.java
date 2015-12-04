@@ -17,6 +17,7 @@ import com.metasocio.model.commentmanagement.Comment;
 import com.metasocio.model.postmanagement.Post;
 import com.metasocio.model.usermanagement.User;
 import com.metasocio.service.commentmanagement.CommentService;
+import com.metasocio.service.likemanagement.LikeService;
 import com.metasocio.service.postmanagement.PostService;
 import com.metasocio.service.usermanagement.UserService;
 
@@ -66,34 +67,50 @@ public class HomePage extends HttpServlet
 			CommentService iCommentService = new CommentService();
 			List<User> usersOfSamedepartment;
 			// Getting the userid from the email
-			int userId = iUserService.getIdByEmail(user.getEmailId());
-			user.setUserId(userId);
+			/*int userId = iUserService.getIdByEmail(user.getEmailId());*/
+			/*user.setUserId(userId);*/
 			// getting the users from the same deepartment
-			usersOfSamedepartment = iUserService.getUsersHavingSameDepartment(userId);
+			usersOfSamedepartment = iUserService.getUsersHavingSameDepartment(user);
 			// setting the userobject
-			request.setAttribute("userObject", user);
-			request.setAttribute("usersList", usersOfSamedepartment);
+			
 			// Putting the postmap with the list and post
 			Map<Post, List<Comment>> postMap = new LinkedHashMap<Post, List<Comment>>();
+			Map<Post, Boolean> likeMap = new LinkedHashMap<Post,Boolean>();
 			// Getting the posts with image
 			List<Post> postsWithImage = iPostService.retrievePostWithImageOnHome();
+			LikeService iLikeService  = new LikeService();
+			
 			// Iterating over post 
 			for (Post post : postsWithImage) 
 			{
+				
+				boolean isLikedByUser = iLikeService.hasUSerAlreadyLiked(user.getUserId(),post.getPostId());
+				
 				// Adding to the list with comment
 				List<Comment> commentsWithImage = iCommentService.retrieveCommentListWithImageByPostID(post.getPostId());
 				// puts the post with image
 				postMap.put(post, commentsWithImage);
+				likeMap.put(post, isLikedByUser);
 			}
 			// forwards to the homepage
+			
+			
+			//request.setAttribute("userObject", user);
+			
+			
+			request.setAttribute("usersList", usersOfSamedepartment);
 			request.setAttribute("postMap", postMap);
+			request.setAttribute("likeMap", likeMap);
 			request.getRequestDispatcher("./view/postmanagement/home.jsp")
 					.forward(request, response);
 		} 
 		catch (MetaSocioSystemException e) 
 		{
 			// sets the attribute
-			request.setAttribute("message", "[" + e.getMessage() + "]");
+			
+			
+			/*request.setAttribute("message", "[" + e.getMessage() + "]");*/
+			
 			request.getRequestDispatcher("./exception/error.jsp").forward(
 					request, response);
 		}

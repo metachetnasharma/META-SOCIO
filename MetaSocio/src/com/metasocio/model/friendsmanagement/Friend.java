@@ -6,9 +6,16 @@ import java.util.Date;
 import lombok.Data;
 @Data
 public class Friend{
-	int id;
+	private	int id;
     
-	int friendOne ;
+	private	int friendOne ;
+	
+	private	int friendTwo;
+	private	Date createdAt;
+	private	Timestamp updatedAt;
+	private	String createdBy;
+	private	String updatedBy;
+	private	int isdelete;
 	public int getId() {
 		return id;
 	}
@@ -57,10 +64,5 @@ public class Friend{
 	public void setIsdelete(int isdelete) {
 		this.isdelete = isdelete;
 	}
-	int friendTwo;
-	Date createdAt;
-	Timestamp updatedAt;
-	String createdBy;
-	String updatedBy;
-	int isdelete;
+	
 }

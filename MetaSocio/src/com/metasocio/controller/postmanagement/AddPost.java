@@ -71,27 +71,51 @@ public class AddPost extends HttpServlet
 			Post newPost=new Post();
 			//getting the userid from the session
 			int userId = user.getUserId();
-			Date date= new java.util.Date();
+			
+			
+			
+			/*Date date= new java.util.Date();*/
+			
+			
+			
 			// setting the date
-			newPost.setDatePosted(date);
+			
+			
+			
+			
+			
+			
+			/*newPost.setDatePosted(date);*/
+			
+			
+			
 			// sets the user
 			newPost.setUser(user);
 			// sets post details
 			newPost.setPostDetails(post);
 			// sets likes
-			newPost.setLikes(0);
+			
+			
+			/*newPost.setLikes(0);*/
+			
+			
 			// gets the user details and share with  the created by and updated by
-			String userName=user.getName();
+		
+			
+			
+			/*String userName=user.getName();
 			newPost.setCreatedBy(userName);
-			newPost.setUpdatedBy(userName);
+			newPost.setUpdatedBy(userName);*/
+			
+			
 			// calling the function share post of the service layer
-			iPostService.sharePost(newPost);
+			iPostService.savePost(newPost);
 			// redirect to the home psage
 			response.sendRedirect("HomePage");
 		} 
 		catch (MetaSocioSystemException e) 
 		{
-			request.setAttribute("message","["+e.getMessage()+"]");
+			request.setAttribute("message","Can't share the post");
 			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
 		}
 	}

@@ -30,7 +30,7 @@ public class FriendService {
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 
-			iFriendFacade.addFriend(friend, secondFriend, transaction, session);
+			iFriendFacade.addFriend(friend, secondFriend, session);
 
 			transaction.commit();
 

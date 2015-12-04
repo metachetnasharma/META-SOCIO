@@ -2,6 +2,8 @@ package com.metasocio.facade.likemanagement;
 
 import java.util.Date;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import org.hibernate.Session;
 
 import com.metasocio.dbhelper.likemanagement.LikeDao;
@@ -70,5 +72,31 @@ public class LikeFacade {
 				iPostFacade.incrementLikesOnPost(postId, session);		//Incrementing no.of Likes on post
 			}
 		}		
+	}
+
+	public void deleteLikeOnPost(int postId, Session session) throws MetaSocioException {
+		LikeDao iLikeDao=LikeDao.getInstance();
+		iLikeDao.deleteLikeOnPost(postId, session);
+		
+	}
+
+	public boolean hasUSerAlreadyLiked(int userId, int postId, Session session) throws MetaSocioException {
+		ValidateUserLike validateUserLike=ValidateUserLike.getInstance();
+		boolean hasAlreadyLiked=validateUserLike.hasUSerAlreadyLiked(userId,postId, session);
+		if(hasAlreadyLiked==true){
+		int hasDeleted=validateUserLike.hasUserLikeDeleted(userId, postId, session);
+		if(hasDeleted==0){
+			hasAlreadyLiked=true;
+		}else{
+			hasAlreadyLiked=false;
+		}
+		}
+		return hasAlreadyLiked;
+	}
+
+	public int LikesOnPostByPostId(int postId, Session session)
+			throws MetaSocioException {
+		LikeDao iLikeDao = LikeDao.getInstance();
+		return  iLikeDao.LikesOnPostByPostId(postId, session);
 	}
 }

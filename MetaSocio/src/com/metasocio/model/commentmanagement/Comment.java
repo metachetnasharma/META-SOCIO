@@ -1,25 +1,29 @@
 package com.metasocio.model.commentmanagement;
 
 import java.sql.Timestamp;
+
 import java.util.Date;
 
 import com.metasocio.model.postmanagement.Post;
 import com.metasocio.model.usermanagement.User;
 
 import lombok.Data;
+/*******************************************************************
+* POJO class of Comment
+********************************************************************/
 @Data
 
 public class Comment {
-	int commentId;
-	String comments;
-	Date dateCommented;
+	private	int commentId;
+	private	String comments;
+	private	Date dateCommented;
 	
-	Timestamp updatedAt;
-	String createdBy;
-	String updatedBy;
-	int isdelete;	
-	Post post;
-	User user;
+	private	Timestamp updatedAt;
+	private	String createdBy;
+	private	String updatedBy;
+	private	int isDelete;	
+	private	Post post;
+	private	User user;
 	public Post getPost() {
 		return post;
 	}
@@ -73,11 +77,11 @@ public class Comment {
 		this.dateCommented = dateCommented;
 	}
 
-	public int getIsdelete() {
-		return isdelete;
+	public int getIsDelete() {
+		return isDelete;
 	}
-	public void setIsdelete(int isdelete) {
-		this.isdelete = isdelete;
+	public void setIsDelete(int isdelete) {
+		this.isDelete = isdelete;
 	}
 	
 }

@@ -45,6 +45,7 @@ public class OAuth extends HttpServlet {
         try {
             // get code
             String code = request.getParameter("code");
+            
             // format parameters to post
             String urlParameters = "code="
                     + code
@@ -70,28 +71,29 @@ public class OAuth extends HttpServlet {
             	outputString += line;
             }
           
-            //System.out.println(outputString);
+           
             
             //get Access Token 
             JsonObject json = (JsonObject)new JsonParser().parse(outputString);
             String access_token = json.get("access_token").getAsString();
            
-           //System.out.println(access_token);
+          
 
             //get User Info 
             url = new URL(
                     "https://www.googleapis.com/oauth2/v1/userinfo?access_token="
                             + access_token);
+            
             urlConn = url.openConnection();
             outputString = "";
             reader = new BufferedReader(new InputStreamReader(
                     urlConn.getInputStream()));
            
             while ((line = reader.readLine()) != null) {
-                //System.out.println("Hello : "+line);
+               
                 outputString += line;
             }
-            //System.out.println(outputString);
+           
             
             // Convert JSON response into Pojo class
             GooglePojo userDataObject = new Gson().fromJson(outputString, GooglePojo.class);
@@ -102,9 +104,10 @@ public class OAuth extends HttpServlet {
             	//System.out.println("**********************************getting session1");
             	
             	 //System.out.println("**********************************getting session2");*/
+            HttpSession session=request.getSession(true);
             boolean isUserExists=false;
             //System.out.println("**********************************getting session");
-        	HttpSession session=request.getSession(true);
+        	
         	//System.out.println("**********************************after getting session");
             
             //MetaSocioService iService=new MetaSocioService();
@@ -114,25 +117,46 @@ public class OAuth extends HttpServlet {
                 	
                 	//System.out.println("**********************************going to in exists method");
 					isUserExists=iUserService.isEmailExists(userDataObject.getEmail());
+					
+					if(isUserExists){
+						 User user=iUserService.getUserByEmail(userDataObject.getEmail());
+	            			
+						 session.setAttribute("userObject",user);
+						 response.sendRedirect("HomePage");
+						 
+						 /*User user=new User();
+	            			user.setEmailId(userDataObject.getEmail());
+	            			user.setName(userDataObject.getName());
+	            			user.setImageURL(userDataObject.getPicture());*/
+						 
+					} 
+					 else{
+		                	/*request.setAttribute("name", userDataObject.getName());
+		                	request.setAttribute("email",userDataObject.getEmail());
+		                	request.setAttribute("picture", userDataObject.getPicture());*/
+		                	request.setAttribute("userDataObject", userDataObject);
+		                	request.getRequestDispatcher("./view/usermanagement/profile.jsp").forward(request, response);
+		                }
+					
+						 
+	            			
+	            			
 					//System.out.println("**********************************come from  exists method");
-				} catch (MetaSocioSystemException e) {
-					// TODO Auto-generated catch block
-					//System.out.println("["+e.getMessage()+"]");
-				}
+				}catch (Exception e) {
+        			// TODO Auto-generated catch block
+        			//System.out.println("_______________________________Exception");
+        			//System.out.println("["+e.getMessage()+"]");;
+        			request.setAttribute("message","sorry can't show your timeline");
+        			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
+        		}
+            	
                 
                 
-                if(isUserExists){
+               
                 	//System.out.println("*********************************exist");
                 //	MetaSocio_Service isService=new MetaSocio_Service();
-            		try {
-            			//isService.setUserInfo(user);
-            			//isService.setUserInfo(user);
-            			User user=new User();
-            			user.setEmailId(userDataObject.getEmail());
-            			user.setName(userDataObject.getName());
-            			user.setImageURL(userDataObject.getPicture());
-            			session.setAttribute("userObject",user);
-            			response.sendRedirect("./HomePage");
+            		/*try {*/
+            			
             			/*int userId = iService.getIdByEmail(userDataObject.getEmail());
             			//System.out.println("*****************************************userf");
             			List<User> users = iService.getUsersHavingSameDepartment(userId);
@@ -144,23 +168,7 @@ public class OAuth extends HttpServlet {
             			request.setAttribute("usersList", users);
             			//System.out.println("________________________________________home");
             			request.getRequestDispatcher("./view/postmanagement/home.jsp").forward(request, response);*/
-            		} catch (Exception e) {
-            			// TODO Auto-generated catch block
-            			//System.out.println("_______________________________Exception");
-            			//System.out.println("["+e.getMessage()+"]");;
-            			request.setAttribute("message","["+e.getMessage()+"]");
-            			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
-            		}
-                	
-                }
-                else{
-                	/*request.setAttribute("name", userDataObject.getName());
-                	request.setAttribute("email",userDataObject.getEmail());
-                	request.setAttribute("picture", userDataObject.getPicture());*/
-                	request.setAttribute("userDataObject", userDataObject);
-                	request.getRequestDispatcher("./view/usermanagement/profile.jsp").forward(request, response);
-                }
-            	
+            		
             	
         /*    }
             else {
@@ -176,13 +184,19 @@ public class OAuth extends HttpServlet {
             reader.close();
             
         } catch (MalformedURLException e) {
+        	request.setAttribute("message","Authentication error");
+			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
         	//System.out.println("hi1");
             //System.out.println("["+e.getMessage()+"]");
             
         } catch (ProtocolException e) {
+        	request.setAttribute("message","Authentication error");
+			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
         	//System.out.println("hi2");
         	  //System.out.println("["+e.getMessage()+"]");
         } catch (IOException e) {
+        	request.setAttribute("message","Authentication error");
+			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
         	//System.out.println("hi3");
         	  //System.out.println("["+e.getMessage()+"]");
         }

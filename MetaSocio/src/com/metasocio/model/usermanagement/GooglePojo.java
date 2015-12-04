@@ -5,7 +5,16 @@ import lombok.Data;
 
 @Data
 public class GooglePojo {
-    String id;
+private String id;
+private   String email;
+private   boolean verified_email;
+private   String name;
+private   String given_name;
+private   String family_name;
+private   String picture;
+private  String hd = "gmail.com";
+
+    
     public String getId() {
 		return id;
 	}
@@ -70,14 +79,7 @@ public class GooglePojo {
 		this.hd = hd;
 	}
 
-	String email;
-    boolean verified_email;
-    String name;
-    String given_name;
-    String family_name;
-    String picture;
-    String hd = "gmail.com";
-
+	
     @Override
     public String toString() {
         return "GooglePojo [id=" + id + ", email=" + email

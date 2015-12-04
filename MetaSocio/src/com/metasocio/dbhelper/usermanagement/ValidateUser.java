@@ -19,10 +19,10 @@ public class ValidateUser {
 
 	public static ValidateUser getInstance() {
 
-		if (iUser == null) {
+		/*if (iUser == null) {*/
 			iUser = new ValidateUser();
 
-		}
+		/*}*/
 		return iUser;
 	}
 
@@ -33,7 +33,7 @@ public class ValidateUser {
 	 * @return
 	 * @throws MetaSocioException
 	 */
-	public boolean isEmailExists(String email, Transaction transaction,
+	public boolean isEmailExists(String email,
 			Session session) throws MetaSocioException {
 		boolean isUserExists = false;
 		// Configuration cfg = new Configuration();

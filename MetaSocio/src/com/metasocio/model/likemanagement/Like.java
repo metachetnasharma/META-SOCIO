@@ -7,16 +7,16 @@ import lombok.Data;
 @Data
 public class Like {
 	
-	int counter;
+	private	int counter;
 	
-	int postId;
-	int likerId;
+	private int postId;
+	private	int likerId;
 	
-	Date createdAt;
-	Timestamp updatedAt;
-	String createdBy;
-	String updatedBy;
-	int isLiked;
+	private	Date createdAt;
+	private	Timestamp updatedAt;
+	private	String createdBy;
+	private	String updatedBy;
+	private	int isLiked;
 	/**
 	 * @return the counter
 	 */

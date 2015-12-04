@@ -31,9 +31,9 @@ public class ValidateUserLike {
 	 ************************************************************/
 	public static ValidateUserLike getInstance() {
 		//Checking if instance already exists
-		if (iValidateUserLike == null) {
+		/*if (iValidateUserLike == null) {*/
 			iValidateUserLike = new ValidateUserLike();		//Creating instance of this class
-		}
+	/*	}*/
 		return iValidateUserLike;		//Returning instance of this class
 	}
 	

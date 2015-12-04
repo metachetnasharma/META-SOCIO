@@ -21,19 +21,19 @@ public class UserDao {
 
 	public static UserDao getInstance() {
 
-		if (iUserDao == null) {
+		/*if (iUserDao == null) {*/
 			iUserDao = new UserDao();
 
-		}
+		/*}*/
 		return iUserDao;
 	}
 	
-	public void setUserInfo(User user, Transaction transaction, Session session)
+	public void setUserInfo(User user, Session session)
 			throws MetaSocioException {
 		session.save(user);
 	}
 
-	public String getDepartment(int userId, Transaction transaction,
+	/*public String getDepartment(int userId,
 			Session session) throws MetaSocioException {
 		Criteria criteria = session.createCriteria(User.class);
 
@@ -44,10 +44,10 @@ public class UserDao {
 		// System.out.println("*******************************department="+department);
 		return department;
 
-	}
+	}*/
 
 	public List<User> getUsersHavingSameDepartment(String department,
-			Transaction transaction, Session session) throws MetaSocioException {
+			 Session session) throws MetaSocioException {
 
 		Criteria criteria = session.createCriteria(User.class);
 
@@ -60,7 +60,7 @@ public class UserDao {
 
 	}
 
-	public int getIdByEmail(String email, Transaction transaction,
+	/*public int getIdByEmail(String email,
 			Session session) throws MetaSocioException {
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("emailId", email));
@@ -72,7 +72,7 @@ public class UserDao {
 
 	}
 
-	public String getNameById(int userId, Transaction transaction,
+	public String getNameById(int userId, 
 			Session session) throws MetaSocioException {
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("userId", userId));
@@ -82,7 +82,7 @@ public class UserDao {
 		return userName;
 	}
 
-	public String getImageById(int userId, Transaction transaction,
+	public String getImageById(int userId,
 			Session session) throws MetaSocioException {
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("userId", userId));
@@ -90,6 +90,33 @@ public class UserDao {
 		user = (User) criteria.uniqueResult();
 		String userImage = user.getImageURL();
 		return userImage;
+	}*/
+
+	public User getUserByEmail(String email, Session session)throws MetaSocioException {
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("emailId", email));
+		User user = new User();
+		user = (User) criteria.uniqueResult();
+		//int id = user.getUserId();
+		// System.out.println("*******************************department="+department);
+		return user;
+	}
+
+	public User getUserById(int followingId, Session session) throws MetaSocioException {
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("userId", followingId));
+		User user = new User();
+		user = (User) criteria.uniqueResult();
+		//int id = user.getUserId();
+		// System.out.println("*******************************department="+department);
+		return user;
+	}
+
+	public List<User> getAllUsers(Session session) throws MetaSocioException {
+		List<User> usersList = new ArrayList<User>();
+		usersList = session.createQuery("FROM User").list(); 
+		
+		return usersList;
 	}
 	
 }

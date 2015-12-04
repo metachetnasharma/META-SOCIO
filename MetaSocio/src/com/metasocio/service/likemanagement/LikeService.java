@@ -61,4 +61,76 @@ public class LikeService {
 			}
 		}
 	}
+
+	public boolean hasUSerAlreadyLiked(int userId, int postId) throws MetaSocioSystemException {
+		Session session = null;		//Creating session
+		Transaction transaction = null;	//Creating transaction
+		boolean hasAlreadyLiked=false;
+		try {
+			Configuration cfg =ConfigurationFactory.getConfigurationInstance();		//Getting instance of configuration file
+			LikeFacade iFacade = new LikeFacade();		//Creating instance of 'LikeFacade' class.
+			SessionFactory sessionFactory = cfg.buildSessionFactory();	//Building session factory
+			session = sessionFactory.openSession();		//opening session
+			transaction = session.beginTransaction();	//beginning transaction
+			hasAlreadyLiked=iFacade.hasUSerAlreadyLiked(userId, postId, session);		//passing session and required data to manage likes operation in Facade 
+			transaction.commit();			//committing transaction 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("[" + e.getMessage() + "]");
+			try {
+				transaction.rollback();		//rolling back transaction if exception occurs
+				System.out.println("Transaction roll back");
+				throw new MetaSocioSystemException("Transaction roll back,["
+						+ e.getMessage() + "]", e);
+			} catch (Exception e1) {
+				System.out.println("error in transactiopn roll back,["
+						+ e1.getMessage() + "]");
+				throw new MetaSocioSystemException("[" + e.getMessage()
+						+ "];error in transactiopn roll back,["
+						+ e1.getMessage() + "]", e);
+			}
+		} finally {
+			if (session != null) {
+				session.close();		//closing session
+			}
+		}
+return hasAlreadyLiked;	}
+
+	public int LikesOnPostByPostId(int postId) throws MetaSocioSystemException{
+		Session session = null;		//Creating session
+		Transaction transaction = null;	//Creating transaction
+		int noOfLikes = 0;
+		try {
+			Configuration cfg =ConfigurationFactory.getConfigurationInstance();		//Getting instance of configuration file
+			LikeFacade iFacade = new LikeFacade();		//Creating instance of 'LikeFacade' class.
+			SessionFactory sessionFactory = cfg.buildSessionFactory();	//Building session factory
+			session = sessionFactory.openSession();		//opening session
+			transaction = session.beginTransaction();	//beginning transaction
+			noOfLikes = iFacade.LikesOnPostByPostId(postId, session);		//passing session and required data to manage likes operation in Facade 
+			transaction.commit();			//committing transaction 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("[" + e.getMessage() + "]");
+			try {
+				transaction.rollback();		//rolling back transaction if exception occurs
+				System.out.println("Transaction roll back");
+				throw new MetaSocioSystemException("Transaction roll back,["
+						+ e.getMessage() + "]", e);
+			} catch (Exception e1) {
+				System.out.println("error in transactiopn roll back,["
+						+ e1.getMessage() + "]");
+				throw new MetaSocioSystemException("[" + e.getMessage()
+						+ "];error in transactiopn roll back,["
+						+ e1.getMessage() + "]", e);
+			}
+		} finally {
+			if (session != null) {
+				session.close();		//closing session
+			}
+		}
+		return noOfLikes;
+	}
+	
 }

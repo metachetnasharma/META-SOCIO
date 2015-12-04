@@ -25,7 +25,7 @@ public class PostService
 	 * @param newPost
 	 * @throws MetaSocioSystemException
 	 */
-	public void sharePost(Post newPost)throws MetaSocioSystemException
+	public void savePost(Post newPost)throws MetaSocioSystemException
 	{
 		Session session = null;
 		Transaction transaction = null;
@@ -40,7 +40,7 @@ public class PostService
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
 			// Share the Post
-			iPostFacade.sharePost(newPost, transaction, session);
+			iPostFacade.savePost(newPost, session);
 			transaction.commit();
 
 		} 
@@ -89,7 +89,7 @@ public class PostService
 			SessionFactory sessionFactory = cfg.buildSessionFactory();
 			session = sessionFactory.openSession();
 			transaction = session.beginTransaction();
-			postsWithImage = iPostFacade.retrievePostWithImageOnHome(transaction, session);
+			postsWithImage = iPostFacade.retrievePostWithImageOnHome(session);
 			transaction.commit();
 
 		}
@@ -117,4 +117,99 @@ public class PostService
 		 // returns the Posts With Image
 		return postsWithImage;
 	}
+
+
+
+
+
+
+
+
+public  void deletePostByPostId(int postId) throws MetaSocioSystemException
+{
+	Session session = null;
+	Transaction transaction = null;
+	// List to store  Post With Image
+	/* List<Post> postsWithImage = new ArrayList<Post>();	*/
+	 try 
+	 {
+		// facde Layer Is Called
+		PostFacade iPostFacade=new PostFacade();
+		Configuration cfg =ConfigurationFactory.getConfigurationInstance();
+		// Session Factory is Called
+		SessionFactory sessionFactory = cfg.buildSessionFactory();
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+	   iPostFacade.deletePostByPostId(postId, session);
+		transaction.commit();
+
+	}
+	 catch (Exception e) 
+	 {
+		e.printStackTrace();
+		System.out.println("[" + e.getMessage() + "]");
+		try {
+			transaction.rollback();
+			System.out.println("Transaction roll back");
+			throw new MetaSocioSystemException("Transaction roll back,["
+					+ e.getMessage() + "]", e);
+		} catch (Exception e1) {
+			System.out.println("error in transactiopn roll back,["
+					+ e1.getMessage() + "]");
+			throw new MetaSocioSystemException("[" + e.getMessage()
+					+ "];error in transactiopn roll back,["
+					+ e1.getMessage() + "]", e);
+		}
+	} finally {
+		if (session != null) {
+			session.close();
+		}
+	}
+	 // returns the Posts With Image
+	
+}
+
+public  void editPostByPostId(int postId,String postDetails) throws MetaSocioSystemException
+{
+	Session session = null;
+	Transaction transaction = null;
+	// List to store  Post With Image
+	/* List<Post> postsWithImage = new ArrayList<Post>();	*/
+	 try 
+	 {
+		// facde Layer Is Called
+		PostFacade iPostFacade=new PostFacade();
+		Configuration cfg =ConfigurationFactory.getConfigurationInstance();
+		// Session Factory is Called
+		SessionFactory sessionFactory = cfg.buildSessionFactory();
+		session = sessionFactory.openSession();
+		transaction = session.beginTransaction();
+	   iPostFacade.editPostByPostId(postId,postDetails, session);
+		transaction.commit();
+
+	}
+	 catch (Exception e) 
+	 {
+		e.printStackTrace();
+		System.out.println("[" + e.getMessage() + "]");
+		try {
+			transaction.rollback();
+			System.out.println("Transaction roll back");
+			throw new MetaSocioSystemException("Transaction roll back,["
+					+ e.getMessage() + "]", e);
+		} catch (Exception e1) {
+			System.out.println("error in transactiopn roll back,["
+					+ e1.getMessage() + "]");
+			throw new MetaSocioSystemException("[" + e.getMessage()
+					+ "];error in transactiopn roll back,["
+					+ e1.getMessage() + "]", e);
+		}
+	} finally {
+		if (session != null) {
+			session.close();
+		}
+	}
+	 // returns the Posts With Image
+	
+}
 }

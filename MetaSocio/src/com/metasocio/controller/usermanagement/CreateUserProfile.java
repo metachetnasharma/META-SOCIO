@@ -69,9 +69,9 @@ public class CreateUserProfile extends HttpServlet {
 				dob = simpleDateFormat.parse(dobString);
 				System.out.println(dob+"dob");
 			}
-		 catch (ParseException e1) {
+		 catch (ParseException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e1.getMessage());
+			System.out.println(e.getMessage());
 		}
 		}
 		String gender=request.getParameter("gender");
@@ -99,22 +99,37 @@ public class CreateUserProfile extends HttpServlet {
         user.setRelationshipStatus(relationshipStatus);
 		user.setImageURL(image);
 		
-		Date date= new Date();
 		
-		user.setCreatedAt(date);
+		
+		/*Date date= new Date();
+		
+		user.setCreatedAt(date);*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//CRUD crud=new CRUD();
 	//MetaSocioService iService=new MetaSocioService();
 		UserService iUserService=new UserService();
 		try {
 			iUserService.setUserInfo(user);
-			HttpSession session=request.getSession(false);
-			session.setAttribute("userObject",user);
+			 User newUser=iUserService.getUserByEmail(email);
+			 HttpSession session=request.getSession(false);
+			session.setAttribute("userObject",newUser);
 			response.sendRedirect("HomePage");
 			//request.getRequestDispatcher("./view/PostManagement/home.jsp").forward(request, response);
 		} catch (MetaSocioSystemException e) {
 			// TODO Auto-generated catch block
 			//System.out.println("["+e.getMessage()+"]");;
-			request.setAttribute("message","["+e.getMessage()+"]");
+			
+			
+			//request.setAttribute("message","["+e.getMessage()+"]");
 			request.getRequestDispatcher("./exception/error.jsp").forward(request, response);
 		}
 	}
